@@ -1,0 +1,117 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import type { Recipe } from '../data/types';
+import { colors, fonts, radii, shadow } from '../theme/tokens';
+
+type Props = {
+  recipe: Recipe;
+  inWeek: boolean;
+  isFav: boolean;
+  onToggleFav: () => void;
+  onToggleWeek: () => void;
+};
+
+export function RecipeCard({ recipe, inWeek, isFav, onToggleFav, onToggleWeek }: Props) {
+  return (
+    <Pressable style={styles.card} onPress={() => router.push(`/recipe/${recipe.id}`)}>
+      <View style={[styles.photo, { backgroundColor: recipe.tint }]}>
+        <Text style={styles.photoCaption}>Foto: {recipe.title}</Text>
+
+        <Pressable
+          hitSlop={8}
+          onPress={(e) => {
+            e.stopPropagation();
+            onToggleFav();
+          }}
+          style={styles.favButton}
+        >
+          <Ionicons
+            name={isFav ? 'heart' : 'heart-outline'}
+            size={14}
+            color={isFav ? colors.terracotta : colors.meta}
+          />
+        </Pressable>
+
+        <Pressable
+          hitSlop={8}
+          onPress={(e) => {
+            e.stopPropagation();
+            onToggleWeek();
+          }}
+          style={[
+            styles.addButton,
+            { backgroundColor: inWeek ? colors.accent : colors.surface },
+          ]}
+        >
+          <Ionicons
+            name={inWeek ? 'checkmark' : 'add'}
+            size={19}
+            color={inWeek ? colors.onAccent : colors.ink}
+          />
+        </Pressable>
+      </View>
+
+      <Text style={styles.title} numberOfLines={2}>
+        {recipe.title}
+      </Text>
+      <Text style={styles.meta}>
+        {recipe.minutes} Min · {recipe.category}
+      </Text>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    flex: 1,
+  },
+  photo: {
+    height: 138,
+    borderRadius: radii.lg,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoCaption: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    color: 'rgba(23,21,15,0.42)',
+  },
+  favButton: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadow.card,
+  },
+  title: {
+    marginTop: 9,
+    fontSize: 14.5,
+    fontWeight: '600',
+    lineHeight: 18,
+    color: colors.ink,
+  },
+  meta: {
+    marginTop: 5,
+    fontFamily: fonts.mono,
+    fontSize: 10.5,
+    letterSpacing: 0.4,
+    color: colors.meta,
+  },
+});

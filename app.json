@@ -19,7 +19,33 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "Kochbuch",
+      "shortName": "Kochbuch",
+      "themeColor": "#2E5E43",
+      "backgroundColor": "#F6F3EC",
+      "display": "standalone",
+      "orientation": "portrait",
+      "lang": "de"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-font",
+      "expo-splash-screen"
+    ],
+    "experiments": {
+      "baseUrl": "/kochbuch"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "",
+        "authDomain": "",
+        "projectId": "",
+        "storageBucket": "",
+        "messagingSenderId": "",
+        "appId": ""
+      }
     }
   }
 }
