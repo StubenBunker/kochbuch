@@ -32,9 +32,21 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayout}>
       <SafeAreaProvider>
         <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="recipe/[id]" options={{ presentation: 'modal' }} />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.background },
+            animation: 'none',
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="woche" />
+          <Stack.Screen name="liste" />
+          <Stack.Screen name="favoriten" />
+          <Stack.Screen
+            name="recipe/[id]"
+            options={{ presentation: 'modal', animation: 'default' }}
+          />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>

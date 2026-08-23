@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { recipes } from '../../src/data/recipes';
-import { Header } from '../../src/components/Header';
-import { RecipeCard } from '../../src/components/RecipeCard';
-import { EmptyState } from '../../src/components/EmptyState';
-import { colors } from '../../src/theme/tokens';
-import { useHousehold } from '../../src/store/household';
+import { recipes } from '../src/data/recipes';
+import { Header } from '../src/components/Header';
+import { RecipeCard } from '../src/components/RecipeCard';
+import { EmptyState } from '../src/components/EmptyState';
+import { colors } from '../src/theme/tokens';
+import { useHousehold } from '../src/store/household';
 
 export default function FavoritenScreen() {
   const plan = useHousehold((s) => s.plan);

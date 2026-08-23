@@ -1,17 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts } from '../theme/tokens';
+import { NavMenu } from './NavMenu';
 
 export function Header({
   title,
   subtitle,
-  right,
   bottomSpacing = 12,
   children,
 }: {
   title: string;
   subtitle: string;
-  right?: React.ReactNode;
   bottomSpacing?: number;
   children?: React.ReactNode;
 }) {
@@ -23,7 +22,7 @@ export function Header({
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>{subtitle}</Text>
         </View>
-        {right}
+        <NavMenu />
       </View>
       {children}
     </View>

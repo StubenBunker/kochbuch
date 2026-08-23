@@ -2,14 +2,14 @@ import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { findRecipe } from '../../src/data/recipes';
-import { Header } from '../../src/components/Header';
-import { EmptyState } from '../../src/components/EmptyState';
-import { PortionStepper } from '../../src/components/PortionStepper';
-import { RecipePhoto } from '../../src/components/RecipePhoto';
-import { colors, fonts, radii } from '../../src/theme/tokens';
-import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
-import { buildShoppingList } from '../../src/utils/shopping';
+import { findRecipe } from '../src/data/recipes';
+import { Header } from '../src/components/Header';
+import { EmptyState } from '../src/components/EmptyState';
+import { PortionStepper } from '../src/components/PortionStepper';
+import { RecipePhoto } from '../src/components/RecipePhoto';
+import { colors, fonts, radii } from '../src/theme/tokens';
+import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
+import { buildShoppingList } from '../src/utils/shopping';
 
 export default function WocheScreen() {
   const plan = useHousehold((s) => s.plan);
@@ -61,7 +61,7 @@ export default function WocheScreen() {
             </View>
           ))}
 
-          <Pressable style={styles.cta} onPress={() => router.navigate('/liste')}>
+          <Pressable style={styles.cta} onPress={() => router.replace('/liste')}>
             <Text style={styles.ctaText}>Einkaufsliste ansehen · {shoppingLineCount} Zutaten</Text>
           </Pressable>
         </ScrollView>

@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Header } from '../../src/components/Header';
-import { EmptyState } from '../../src/components/EmptyState';
-import { colors, fonts, radii } from '../../src/theme/tokens';
-import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
-import { buildShoppingList } from '../../src/utils/shopping';
-import { formatAmount } from '../../src/utils/format';
+import { Header } from '../src/components/Header';
+import { EmptyState } from '../src/components/EmptyState';
+import { colors, fonts, radii } from '../src/theme/tokens';
+import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
+import { buildShoppingList } from '../src/utils/shopping';
+import { formatAmount } from '../src/utils/format';
 
 export default function ListeScreen() {
   const plan = useHousehold((s) => s.plan);

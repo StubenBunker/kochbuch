@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { router } from 'expo-router';
-import { recipes, RECIPE_CATEGORIES } from '../../src/data/recipes';
-import { Header } from '../../src/components/Header';
-import { RecipeCard } from '../../src/components/RecipeCard';
-import { colors, fonts } from '../../src/theme/tokens';
-import { useHousehold } from '../../src/store/household';
+import { recipes, RECIPE_CATEGORIES } from '../src/data/recipes';
+import { Header } from '../src/components/Header';
+import { RecipeCard } from '../src/components/RecipeCard';
+import { colors } from '../src/theme/tokens';
+import { useHousehold } from '../src/store/household';
 
 const CHIPS = ['Alle', ...RECIPE_CATEGORIES];
 
@@ -23,17 +22,7 @@ export default function RezepteScreen() {
 
   return (
     <View style={styles.screen}>
-      <Header
-        title="Kochbuch"
-        subtitle={`${recipes.length} REZEPTE`}
-        right={
-          plan.length > 0 ? (
-            <Pressable style={styles.weekPill} onPress={() => router.navigate('/woche')}>
-              <Text style={styles.weekPillText}>{plan.length} in Woche</Text>
-            </Pressable>
-          ) : undefined
-        }
-      />
+      <Header title="Kochbuch" subtitle={`${recipes.length} REZEPTE`} />
 
       <ScrollView
         horizontal
@@ -84,17 +73,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
-  },
-  weekPill: {
-    backgroundColor: colors.accent,
-    paddingVertical: 9,
-    paddingHorizontal: 13,
-    borderRadius: 999,
-  },
-  weekPillText: {
-    fontFamily: fonts.mono,
-    fontSize: 11.5,
-    color: colors.onAccent,
   },
   chipScroll: {
     flexGrow: 0,
