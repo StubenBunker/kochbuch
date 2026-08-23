@@ -14,6 +14,7 @@ export type HouseholdState = {
   portions: Record<string, number>;
   favs: Record<string, boolean>;
   checked: Record<string, boolean>;
+  checkedAt: Record<string, number>; // ms timestamp — drives the auto-hide delay
   cart: Record<string, boolean>;
   customItems: CustomItem[];
 };
@@ -43,6 +44,7 @@ function pick(s: HouseholdState): HouseholdState {
     portions: s.portions,
     favs: s.favs,
     checked: s.checked,
+    checkedAt: s.checkedAt,
     cart: s.cart,
     customItems: s.customItems,
   };
@@ -71,6 +73,7 @@ export const useHousehold = create<Store>((set, get) => ({
   portions: {},
   favs: {},
   checked: {},
+  checkedAt: {},
   cart: {},
   customItems: [],
   hydrated: false,
@@ -109,9 +112,13 @@ export const useHousehold = create<Store>((set, get) => ({
     }),
   toggleChecked: (key) =>
     set((s) => {
-      const checked = { ...s.checked, [key]: !s.checked[key] };
-      schedulePersist(pick({ ...s, checked }));
-      return { checked };
+      const isChecked = !s.checked[key];
+      const checked = { ...s.checked, [key]: isChecked };
+      const checkedAt = isChecked
+        ? { ...s.checkedAt, [key]: Date.now() }
+        : withoutKey(s.checkedAt, key);
+      schedulePersist(pick({ ...s, checked, checkedAt }));
+      return { checked, checkedAt };
     }),
   toggleCart: (id) =>
     set((s) => {
@@ -135,10 +142,12 @@ export const useHousehold = create<Store>((set, get) => ({
     }),
   removeCustomItem: (id) =>
     set((s) => {
+      const key = `custom:${id}`;
       const customItems = s.customItems.filter((i) => i.id !== id);
-      const checked = withoutKey(s.checked, `custom:${id}`);
-      schedulePersist(pick({ ...s, customItems, checked }));
-      return { customItems, checked };
+      const checked = withoutKey(s.checked, key);
+      const checkedAt = withoutKey(s.checkedAt, key);
+      schedulePersist(pick({ ...s, customItems, checked, checkedAt }));
+      return { customItems, checked, checkedAt };
     }),
 }));
 
@@ -169,6 +178,7 @@ export async function initHouseholdSync(): Promise<void> {
           portions: data.portions ?? {},
           favs: data.favs ?? {},
           checked: data.checked ?? {},
+          checkedAt: data.checkedAt ?? {},
           cart: data.cart ?? {},
           customItems: data.customItems ?? [],
         };

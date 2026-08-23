@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Header } from '../src/components/Header';
@@ -9,6 +9,11 @@ import { colors, fonts, radii } from '../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
 import { buildShoppingList, mergeCustomItems } from '../src/utils/shopping';
 import { formatAmount } from '../src/utils/format';
+
+// Checked items disappear from the list a while after being ticked off, so the
+// list stays clean towards the end of a shopping trip without needing a manual
+// "clear checked" action.
+const HIDE_CHECKED_AFTER_MS = 30 * 60 * 1000;
 
 const UNIT_OPTIONS: { label: string; value: CustomUnit | undefined }[] = [
   { label: 'keine Einheit', value: undefined },
@@ -22,6 +27,7 @@ export default function ListeScreen() {
   const portions = useHousehold((s) => s.portions);
   const cart = useHousehold((s) => s.cart);
   const checked = useHousehold((s) => s.checked);
+  const checkedAt = useHousehold((s) => s.checkedAt);
   const customItems = useHousehold((s) => s.customItems);
   const toggleChecked = useHousehold((s) => s.toggleChecked);
   const addCustomItem = useHousehold((s) => s.addCustomItem);
@@ -32,11 +38,27 @@ export default function ListeScreen() {
   const [newItemUnit, setNewItemUnit] = useState<CustomUnit | undefined>(undefined);
   const [newItemAmount, setNewItemAmount] = useState('1');
 
+  // Ticks once a minute so items cross the 30-minute hide threshold live,
+  // without needing a screen reload.
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 60 * 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const cartIds = useMemo(() => plan.filter((id) => cart[id]), [plan, cart]);
-  const groups = useMemo(
-    () => mergeCustomItems(buildShoppingList(cartIds, portions, DEFAULT_PORTIONS), customItems),
-    [cartIds, portions, customItems],
-  );
+  const groups = useMemo(() => {
+    const merged = mergeCustomItems(buildShoppingList(cartIds, portions, DEFAULT_PORTIONS), customItems);
+    return merged
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => {
+          const at = checkedAt[item.key];
+          return !(checked[item.key] && at && now - at > HIDE_CHECKED_AFTER_MS);
+        }),
+      }))
+      .filter((group) => group.items.length > 0);
+  }, [cartIds, portions, customItems, checked, checkedAt, now]);
   const allItems = useMemo(() => groups.flatMap((g) => g.items), [groups]);
   const checkedCount = allItems.filter((item) => checked[item.key]).length;
   const total = allItems.length;
