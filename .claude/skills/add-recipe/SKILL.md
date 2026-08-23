@@ -27,6 +27,11 @@ Frag nach, was fehlt, statt zu raten. Für ein vollständiges Rezept brauchst du
   `photo: require('../../assets/recipes/<id>.jpg')` im Rezept-Objekt setzen. Ohne
   Foto bleibt das Feld einfach weg — die Karte zeigt dann automatisch den
   Tint-Platzhalter.
+- **Alternativen (optional)** — nur fragen/setzen, wenn es einen sinnvollen
+  Ersatz-Tipp gibt (z. B. "Statt Tofu geht auch Seitan oder Kichererbsen"). Als
+  `alternatives: '...'`-Feld (ein Satz, String) im Rezept-Objekt. Die meisten
+  Rezepte brauchen das nicht — nicht erfinden, nur setzen wenn der Nutzer eine
+  echte Alternative nennt oder explizit danach fragt.
 
 Wenn der Nutzer ein Rezept einfach als Fließtext einfügt (z. B. aus einer Kochseite
 kopiert), extrahiere daraus die Felder selbst und bestätige kurz die Zusammenfassung,

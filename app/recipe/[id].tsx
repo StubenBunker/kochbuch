@@ -1,7 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { findRecipe } from '../../src/data/recipes';
 import { PortionStepper } from '../../src/components/PortionStepper';
@@ -9,13 +8,11 @@ import { RecipePhoto } from '../../src/components/RecipePhoto';
 import { colors, fonts, radii } from '../../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
 import { formatAmount } from '../../src/utils/format';
-import { useBottomSafeArea } from '../../src/utils/safeArea';
 
 export default function RecipeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const recipe = findRecipe(id);
   const insets = useSafeAreaInsets();
-  const bottomInset = useBottomSafeArea();
 
   const plan = useHousehold((s) => s.plan);
   const favs = useHousehold((s) => s.favs);
@@ -40,22 +37,35 @@ export default function RecipeDetailScreen() {
       <ScrollView contentContainerStyle={styles.scrollBody} bounces={false}>
         <RecipePhoto recipe={recipe} style={styles.hero} captionSize={11}>
           <Pressable
-            style={[styles.circleButton, { top: insets.top + 18, left: 16 }]}
+            style={[styles.circleButton, { position: 'absolute', top: insets.top + 18, left: 16 }]}
             onPress={() => router.back()}
           >
             <Ionicons name="chevron-back" size={17} color={colors.inkSoft} />
           </Pressable>
 
-          <Pressable
-            style={[styles.circleButton, { top: insets.top + 18, right: 16 }]}
-            onPress={() => toggleFav(recipe.id)}
-          >
-            <Ionicons
-              name={isFav ? 'heart' : 'heart-outline'}
-              size={16}
-              color={isFav ? colors.terracotta : colors.inkMuted}
-            />
-          </Pressable>
+          <View style={[styles.heroActions, { top: insets.top + 18, right: 16 }]}>
+            <Pressable
+              style={[
+                styles.circleButton,
+                { backgroundColor: inWeek ? colors.accent : 'rgba(255,253,248,0.9)' },
+              ]}
+              onPress={() => toggleAdd(recipe.id)}
+            >
+              <Ionicons
+                name={inWeek ? 'checkmark' : 'add'}
+                size={19}
+                color={inWeek ? colors.onAccent : colors.inkSoft}
+              />
+            </Pressable>
+
+            <Pressable style={styles.circleButton} onPress={() => toggleFav(recipe.id)}>
+              <Ionicons
+                name={isFav ? 'heart' : 'heart-outline'}
+                size={16}
+                color={isFav ? colors.terracotta : colors.inkMuted}
+              />
+            </Pressable>
+          </View>
         </RecipePhoto>
 
         <View style={styles.content}>
@@ -66,10 +76,7 @@ export default function RecipeDetailScreen() {
           <Text style={styles.description}>{recipe.description}</Text>
 
           <View style={styles.portionCard}>
-            <View>
-              <Text style={styles.portionLabel}>Portionen</Text>
-              <Text style={styles.portionSub}>Mengen passen sich an</Text>
-            </View>
+            <Text style={styles.portionLabel}>Portionen</Text>
             <PortionStepper
               variant="detail"
               value={portions}
@@ -93,6 +100,13 @@ export default function RecipeDetailScreen() {
             ))}
           </View>
 
+          {recipe.alternatives && (
+            <>
+              <Text style={styles.sectionHeading}>Alternativen</Text>
+              <Text style={styles.alternativesText}>{recipe.alternatives}</Text>
+            </>
+          )}
+
           <Text style={styles.sectionHeading}>Zubereitung</Text>
           <View style={styles.steps}>
             {recipe.steps.map((step, index) => (
@@ -104,21 +118,6 @@ export default function RecipeDetailScreen() {
           </View>
         </View>
       </ScrollView>
-
-      <LinearGradient
-        colors={['rgba(246,243,236,0)', colors.background, colors.background]}
-        locations={[0, 0.38, 1]}
-        style={[styles.ctaWrap, { paddingBottom: bottomInset + 16 }]}
-      >
-        <Pressable
-          style={[styles.cta, { backgroundColor: inWeek ? colors.surface : colors.accent }]}
-          onPress={() => toggleAdd(recipe.id)}
-        >
-          <Text style={[styles.ctaText, { color: inWeek ? colors.ink : colors.onAccent }]}>
-            {inWeek ? `✓ In der Woche · ${portions} Portionen` : '+ Zur Woche hinzufügen'}
-          </Text>
-        </Pressable>
-      </LinearGradient>
     </View>
   );
 }
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scrollBody: {
-    paddingBottom: 110,
+    paddingBottom: 40,
   },
   hero: {
     height: 300,
@@ -142,13 +141,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   circleButton: {
-    position: 'absolute',
     width: 38,
     height: 38,
     borderRadius: 19,
     backgroundColor: 'rgba(255,253,248,0.9)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  heroActions: {
+    position: 'absolute',
+    flexDirection: 'row',
+    gap: 10,
   },
   content: {
     paddingHorizontal: 20,
@@ -191,12 +194,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.ink,
   },
-  portionSub: {
-    fontFamily: fonts.mono,
-    fontSize: 10.5,
-    color: colors.meta,
-    marginTop: 3,
-  },
   sectionHeading: {
     marginTop: 26,
     fontFamily: fonts.mono,
@@ -226,6 +223,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.accent,
   },
+  alternativesText: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: colors.bodyMuted,
+  },
   steps: {
     gap: 16,
   },
@@ -244,24 +246,5 @@ const styles = StyleSheet.create({
     fontSize: 14.5,
     lineHeight: 22,
     color: colors.inkSoft,
-  },
-  ctaWrap: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: 20,
-    paddingTop: 14,
-  },
-  cta: {
-    borderRadius: radii.lg,
-    paddingVertical: 17,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.borderChip,
-  },
-  ctaText: {
-    fontSize: 15,
-    fontWeight: '600',
   },
 });

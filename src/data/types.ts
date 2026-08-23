@@ -31,4 +31,11 @@ export type Recipe = {
   description: string;
   ingredients: Ingredient[];
   steps: string[];
+  alternatives?: string; // optional substitution tip, e.g. "Statt Tofu geht auch Seitan"
+};
+
+export type CustomItem = {
+  id: string;
+  name: string;
+  category: ShoppingCategory;
 };

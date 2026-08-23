@@ -1,12 +1,13 @@
 import { findRecipe, SHOPPING_CATEGORY_ORDER } from '../data/recipes';
-import type { ShoppingCategory } from '../data/types';
+import type { CustomItem, ShoppingCategory } from '../data/types';
 
 export type ShoppingLine = {
-  key: string; // `${name}|${unit}`
+  key: string; // `${name}|${unit}` for recipe-derived lines, `custom:${id}` for manual ones
   name: string;
-  unit: string;
+  unit: string; // '' for manual items — they don't carry a per-portion amount
   category: ShoppingCategory;
   amount: number;
+  custom?: boolean;
 };
 
 export type ShoppingGroup = {
@@ -46,5 +47,31 @@ export function buildShoppingList(
   return SHOPPING_CATEGORY_ORDER.map((category) => ({
     category,
     items: lines.filter((l) => l.category === category),
+  })).filter((g) => g.items.length > 0);
+}
+
+/** Folds manually added items (see CustomItem) into the recipe-derived groups. */
+export function mergeCustomItems(
+  groups: ShoppingGroup[],
+  customItems: CustomItem[],
+): ShoppingGroup[] {
+  const byCategory = new Map<ShoppingCategory, ShoppingLine[]>();
+  for (const group of groups) byCategory.set(group.category, [...group.items]);
+
+  for (const item of customItems) {
+    const line: ShoppingLine = {
+      key: `custom:${item.id}`,
+      name: item.name,
+      unit: '',
+      amount: 0,
+      category: item.category,
+      custom: true,
+    };
+    byCategory.set(item.category, [...(byCategory.get(item.category) ?? []), line]);
+  }
+
+  return SHOPPING_CATEGORY_ORDER.map((category) => ({
+    category,
+    items: byCategory.get(category) ?? [],
   })).filter((g) => g.items.length > 0);
 }

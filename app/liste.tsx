@@ -1,11 +1,13 @@
-import { useMemo } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Header } from '../src/components/Header';
 import { EmptyState } from '../src/components/EmptyState';
+import { SHOPPING_CATEGORY_ORDER } from '../src/data/recipes';
+import type { ShoppingCategory } from '../src/data/types';
 import { colors, fonts, radii } from '../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
-import { buildShoppingList } from '../src/utils/shopping';
+import { buildShoppingList, mergeCustomItems } from '../src/utils/shopping';
 import { formatAmount } from '../src/utils/format';
 
 export default function ListeScreen() {
@@ -13,17 +15,31 @@ export default function ListeScreen() {
   const portions = useHousehold((s) => s.portions);
   const cart = useHousehold((s) => s.cart);
   const checked = useHousehold((s) => s.checked);
+  const customItems = useHousehold((s) => s.customItems);
   const toggleChecked = useHousehold((s) => s.toggleChecked);
+  const addCustomItem = useHousehold((s) => s.addCustomItem);
+  const removeCustomItem = useHousehold((s) => s.removeCustomItem);
+
+  const [newItemText, setNewItemText] = useState('');
+  const [newItemCategory, setNewItemCategory] = useState<ShoppingCategory>('Sonstiges');
 
   const cartIds = useMemo(() => plan.filter((id) => cart[id]), [plan, cart]);
   const groups = useMemo(
-    () => buildShoppingList(cartIds, portions, DEFAULT_PORTIONS),
-    [cartIds, portions],
+    () => mergeCustomItems(buildShoppingList(cartIds, portions, DEFAULT_PORTIONS), customItems),
+    [cartIds, portions, customItems],
   );
   const allItems = useMemo(() => groups.flatMap((g) => g.items), [groups]);
   const checkedCount = allItems.filter((item) => checked[item.key]).length;
   const total = allItems.length;
   const progress = total > 0 ? checkedCount / total : 0;
+
+  function submitNewItem() {
+    const trimmed = newItemText.trim();
+    if (!trimmed) return;
+    addCustomItem(trimmed, newItemCategory);
+    setNewItemText('');
+    setNewItemCategory('Sonstiges');
+  }
 
   return (
     <View style={styles.screen}>
@@ -37,17 +53,56 @@ export default function ListeScreen() {
         </View>
       </Header>
 
-      {total === 0 ? (
-        <EmptyState
-          lines={
-            plan.length === 0
-              ? ['Die Liste füllt sich automatisch,', 'sobald Rezepte in der Woche sind.']
-              : ['Wähle bei "Diese Woche" per Warenkorb-Symbol,', 'wofür du einkaufen willst.']
-          }
-        />
-      ) : (
-        <ScrollView contentContainerStyle={styles.groups} bounces={false}>
-          {groups.map((group) => (
+      <ScrollView contentContainerStyle={styles.groups} bounces={false}>
+        <View style={styles.addRow}>
+          <TextInput
+            value={newItemText}
+            onChangeText={setNewItemText}
+            onSubmitEditing={submitNewItem}
+            placeholder="Artikel hinzufügen…"
+            placeholderTextColor={colors.meta}
+            returnKeyType="done"
+            style={styles.addInput}
+          />
+          <Pressable style={styles.addButton} onPress={submitNewItem}>
+            <Ionicons name="add" size={20} color={colors.onAccent} />
+          </Pressable>
+        </View>
+
+        {newItemText.length > 0 && (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            bounces={false}
+            contentContainerStyle={styles.categoryRow}
+          >
+            {SHOPPING_CATEGORY_ORDER.map((cat) => {
+              const active = cat === newItemCategory;
+              return (
+                <Pressable
+                  key={cat}
+                  onPress={() => setNewItemCategory(cat)}
+                  style={[styles.categoryChip, active && styles.categoryChipActive]}
+                >
+                  <Text style={[styles.categoryChipText, active && styles.categoryChipTextActive]}>
+                    {cat}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        )}
+
+        {total === 0 ? (
+          <EmptyState
+            lines={
+              plan.length === 0
+                ? ['Die Liste füllt sich automatisch,', 'sobald Rezepte in der Woche sind.']
+                : ['Wähle bei "Diese Woche" per Warenkorb-Symbol,', 'wofür du einkaufen willst.']
+            }
+          />
+        ) : (
+          groups.map((group) => (
             <View key={group.category}>
               <View style={styles.groupHeader}>
                 <Text style={styles.groupName}>{group.category}</Text>
@@ -75,17 +130,29 @@ export default function ListeScreen() {
                       >
                         {item.name}
                       </Text>
-                      <Text style={[styles.itemAmount, isChecked && styles.strike]}>
-                        {formatAmount(item.amount)} {item.unit}
-                      </Text>
+                      {item.custom ? (
+                        <Pressable
+                          hitSlop={10}
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            removeCustomItem(item.key.replace('custom:', ''));
+                          }}
+                        >
+                          <Ionicons name="close" size={16} color={colors.disabled} />
+                        </Pressable>
+                      ) : (
+                        <Text style={[styles.itemAmount, isChecked && styles.strike]}>
+                          {formatAmount(item.amount)} {item.unit}
+                        </Text>
+                      )}
                     </Pressable>
                   );
                 })}
               </View>
             </View>
-          ))}
-        </ScrollView>
-      )}
+          ))
+        )}
+      </ScrollView>
     </View>
   );
 }
@@ -112,6 +179,53 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     gap: 22,
     paddingBottom: 100,
+  },
+  addRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  addInput: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.hairline,
+    borderRadius: radii.lg,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 14.5,
+    color: colors.ink,
+  },
+  addButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  categoryRow: {
+    gap: 8,
+    marginTop: -10,
+  },
+  categoryChip: {
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.borderChip,
+  },
+  categoryChipActive: {
+    backgroundColor: colors.ink,
+    borderColor: colors.ink,
+  },
+  categoryChipText: {
+    fontSize: 12.5,
+    fontWeight: '500',
+    color: colors.inkMuted,
+  },
+  categoryChipTextActive: {
+    color: colors.onAccent,
   },
   groupHeader: {
     flexDirection: 'row',

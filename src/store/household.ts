@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { getFirestoreDb, ensureSignedIn, isFirebaseConfigured } from '../lib/firebase';
+import type { CustomItem, ShoppingCategory } from '../data/types';
 
 export const DEFAULT_PORTIONS = 4;
 const MAX_PORTIONS = 12;
@@ -14,6 +15,7 @@ export type HouseholdState = {
   favs: Record<string, boolean>;
   checked: Record<string, boolean>;
   cart: Record<string, boolean>;
+  customItems: CustomItem[];
 };
 
 type Store = HouseholdState & {
@@ -26,10 +28,19 @@ type Store = HouseholdState & {
   toggleFav: (id: string) => void;
   toggleChecked: (key: string) => void;
   toggleCart: (id: string) => void;
+  addCustomItem: (name: string, category: ShoppingCategory) => void;
+  removeCustomItem: (id: string) => void;
 };
 
 function pick(s: HouseholdState): HouseholdState {
-  return { plan: s.plan, portions: s.portions, favs: s.favs, checked: s.checked, cart: s.cart };
+  return {
+    plan: s.plan,
+    portions: s.portions,
+    favs: s.favs,
+    checked: s.checked,
+    cart: s.cart,
+    customItems: s.customItems,
+  };
 }
 
 function withoutKey<T>(record: Record<string, T>, key: string): Record<string, T> {
@@ -56,6 +67,7 @@ export const useHousehold = create<Store>((set, get) => ({
   favs: {},
   checked: {},
   cart: {},
+  customItems: [],
   hydrated: false,
   synced: false,
   portionFor: (id) => get().portions[id] ?? DEFAULT_PORTIONS,
@@ -102,6 +114,26 @@ export const useHousehold = create<Store>((set, get) => ({
       schedulePersist(pick({ ...s, cart }));
       return { cart };
     }),
+  addCustomItem: (name, category) =>
+    set((s) => {
+      const trimmed = name.trim();
+      if (!trimmed) return {};
+      const item: CustomItem = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        name: trimmed,
+        category,
+      };
+      const customItems = [...s.customItems, item];
+      schedulePersist(pick({ ...s, customItems }));
+      return { customItems };
+    }),
+  removeCustomItem: (id) =>
+    set((s) => {
+      const customItems = s.customItems.filter((i) => i.id !== id);
+      const checked = withoutKey(s.checked, `custom:${id}`);
+      schedulePersist(pick({ ...s, customItems, checked }));
+      return { customItems, checked };
+    }),
 }));
 
 export async function initHouseholdSync(): Promise<void> {
@@ -132,6 +164,7 @@ export async function initHouseholdSync(): Promise<void> {
           favs: data.favs ?? {},
           checked: data.checked ?? {},
           cart: data.cart ?? {},
+          customItems: data.customItems ?? [],
         };
         useHousehold.setState({ ...next, synced: true });
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
