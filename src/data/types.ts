@@ -41,8 +41,12 @@ export type Recipe = {
   alternatives?: string; // optional substitution tip, e.g. "Statt Tofu geht auch Seitan"
 };
 
+export type CustomUnit = 'Stk' | 'g' | 'ml';
+
 export type CustomItem = {
   id: string;
   name: string;
   category: ShoppingCategory;
+  unit?: CustomUnit;
+  amount?: number; // only meaningful together with unit
 };

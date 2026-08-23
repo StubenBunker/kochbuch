@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { getFirestoreDb, ensureSignedIn, isFirebaseConfigured } from '../lib/firebase';
-import type { CustomItem, ShoppingCategory } from '../data/types';
+import type { CustomItem, CustomUnit, ShoppingCategory } from '../data/types';
 
 export const DEFAULT_PORTIONS = 4;
 const MAX_PORTIONS = 12;
@@ -28,7 +28,12 @@ type Store = HouseholdState & {
   toggleFav: (id: string) => void;
   toggleChecked: (key: string) => void;
   toggleCart: (id: string) => void;
-  addCustomItem: (name: string, category: ShoppingCategory) => void;
+  addCustomItem: (
+    name: string,
+    category: ShoppingCategory,
+    unit?: CustomUnit,
+    amount?: number,
+  ) => void;
   removeCustomItem: (id: string) => void;
 };
 
@@ -114,7 +119,7 @@ export const useHousehold = create<Store>((set, get) => ({
       schedulePersist(pick({ ...s, cart }));
       return { cart };
     }),
-  addCustomItem: (name, category) =>
+  addCustomItem: (name, category, unit, amount) =>
     set((s) => {
       const trimmed = name.trim();
       if (!trimmed) return {};
@@ -122,6 +127,7 @@ export const useHousehold = create<Store>((set, get) => ({
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         name: trimmed,
         category,
+        ...(unit ? { unit, amount: amount && amount > 0 ? amount : 1 } : {}),
       };
       const customItems = [...s.customItems, item];
       schedulePersist(pick({ ...s, customItems }));

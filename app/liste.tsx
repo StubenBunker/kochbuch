@@ -4,11 +4,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { Header } from '../src/components/Header';
 import { EmptyState } from '../src/components/EmptyState';
 import { SHOPPING_CATEGORY_ORDER } from '../src/data/recipes';
-import type { ShoppingCategory } from '../src/data/types';
+import type { CustomUnit, ShoppingCategory } from '../src/data/types';
 import { colors, fonts, radii } from '../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
 import { buildShoppingList, mergeCustomItems } from '../src/utils/shopping';
 import { formatAmount } from '../src/utils/format';
+
+const UNIT_OPTIONS: { label: string; value: CustomUnit | undefined }[] = [
+  { label: 'keine Einheit', value: undefined },
+  { label: 'Stk', value: 'Stk' },
+  { label: 'g', value: 'g' },
+  { label: 'ml', value: 'ml' },
+];
 
 export default function ListeScreen() {
   const plan = useHousehold((s) => s.plan);
@@ -22,6 +29,8 @@ export default function ListeScreen() {
 
   const [newItemText, setNewItemText] = useState('');
   const [newItemCategory, setNewItemCategory] = useState<ShoppingCategory>('Sonstiges');
+  const [newItemUnit, setNewItemUnit] = useState<CustomUnit | undefined>(undefined);
+  const [newItemAmount, setNewItemAmount] = useState('1');
 
   const cartIds = useMemo(() => plan.filter((id) => cart[id]), [plan, cart]);
   const groups = useMemo(
@@ -36,9 +45,11 @@ export default function ListeScreen() {
   function submitNewItem() {
     const trimmed = newItemText.trim();
     if (!trimmed) return;
-    addCustomItem(trimmed, newItemCategory);
+    addCustomItem(trimmed, newItemCategory, newItemUnit, parseFloat(newItemAmount.replace(',', '.')));
     setNewItemText('');
     setNewItemCategory('Sonstiges');
+    setNewItemUnit(undefined);
+    setNewItemAmount('1');
   }
 
   return (
@@ -70,27 +81,67 @@ export default function ListeScreen() {
         </View>
 
         {newItemText.length > 0 && (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            contentContainerStyle={styles.categoryRow}
-          >
-            {SHOPPING_CATEGORY_ORDER.map((cat) => {
-              const active = cat === newItemCategory;
-              return (
-                <Pressable
-                  key={cat}
-                  onPress={() => setNewItemCategory(cat)}
-                  style={[styles.categoryChip, active && styles.categoryChipActive]}
-                >
-                  <Text style={[styles.categoryChipText, active && styles.categoryChipTextActive]}>
-                    {cat}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+          <>
+            <View style={styles.unitRow}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bounces={false}
+                contentContainerStyle={styles.categoryRow}
+              >
+                {UNIT_OPTIONS.map((opt) => {
+                  const active = opt.value === newItemUnit;
+                  return (
+                    <Pressable
+                      key={opt.label}
+                      onPress={() => setNewItemUnit(opt.value)}
+                      style={[styles.categoryChip, active && styles.categoryChipActive]}
+                    >
+                      <Text
+                        style={[styles.categoryChipText, active && styles.categoryChipTextActive]}
+                      >
+                        {opt.label}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+              {newItemUnit && (
+                <TextInput
+                  value={newItemAmount}
+                  onChangeText={setNewItemAmount}
+                  placeholder="Menge"
+                  placeholderTextColor={colors.meta}
+                  keyboardType="numeric"
+                  style={styles.amountInput}
+                />
+              )}
+            </View>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={styles.categoryRow}
+            >
+              {SHOPPING_CATEGORY_ORDER.map((cat) => {
+                const active = cat === newItemCategory;
+                return (
+                  <Pressable
+                    key={cat}
+                    onPress={() => setNewItemCategory(cat)}
+                    style={[styles.categoryChip, active && styles.categoryChipActive]}
+                  >
+                    <Text
+                      style={[styles.categoryChipText, active && styles.categoryChipTextActive]}
+                    >
+                      {cat}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </>
         )}
 
         {total === 0 ? (
@@ -131,15 +182,22 @@ export default function ListeScreen() {
                         {item.name}
                       </Text>
                       {item.custom ? (
-                        <Pressable
-                          hitSlop={10}
-                          onPress={(e) => {
-                            e.stopPropagation();
-                            removeCustomItem(item.key.replace('custom:', ''));
-                          }}
-                        >
-                          <Ionicons name="close" size={16} color={colors.disabled} />
-                        </Pressable>
+                        <>
+                          {!!item.unit && (
+                            <Text style={[styles.itemAmount, isChecked && styles.strike]}>
+                              {formatAmount(item.amount)} {item.unit}
+                            </Text>
+                          )}
+                          <Pressable
+                            hitSlop={10}
+                            onPress={(e) => {
+                              e.stopPropagation();
+                              removeCustomItem(item.key.replace('custom:', ''));
+                            }}
+                          >
+                            <Ionicons name="close" size={16} color={colors.disabled} />
+                          </Pressable>
+                        </>
                       ) : (
                         <Text style={[styles.itemAmount, isChecked && styles.strike]}>
                           {formatAmount(item.amount)} {item.unit}
@@ -203,6 +261,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  unitRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  amountInput: {
+    width: 64,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.hairline,
+    borderRadius: radii.sm,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    fontSize: 13,
+    color: colors.ink,
   },
   categoryRow: {
     gap: 8,

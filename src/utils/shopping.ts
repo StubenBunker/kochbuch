@@ -62,8 +62,8 @@ export function mergeCustomItems(
     const line: ShoppingLine = {
       key: `custom:${item.id}`,
       name: item.name,
-      unit: '',
-      amount: 0,
+      unit: item.unit ?? '',
+      amount: item.unit ? item.amount ?? 1 : 0,
       category: item.category,
       custom: true,
     };
