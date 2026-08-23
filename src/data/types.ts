@@ -10,11 +10,16 @@ export type ShoppingCategory =
   | 'Sonstiges';
 
 export type RecipeCategory =
+  | 'Schnell'
   | 'Asiatisch'
   | 'Indisch'
+  | 'Italienisch'
+  | 'Pasta'
+  | 'Mexikanisch'
+  | 'Suppen & Eintopf'
   | 'Bowls'
-  | 'Schnell'
-  | 'Backen';
+  | 'Street Food'
+  | 'Backwaren & Dessert';
 
 export type Ingredient = {
   name: string;
@@ -26,7 +31,7 @@ export type Ingredient = {
 export type Recipe = {
   id: string;
   title: string;
-  category: RecipeCategory;
+  categories: RecipeCategory[];
   minutes: number;
   tint: string;
   photo?: ImageSourcePropType;

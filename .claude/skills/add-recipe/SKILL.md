@@ -14,8 +14,13 @@ ein neues Rezept hinzuzufügen heißt: ein Objekt an das `recipes`-Array anhäng
 Frag nach, was fehlt, statt zu raten. Für ein vollständiges Rezept brauchst du:
 
 - **Titel** (z. B. "Rote-Linsen-Dal")
-- **Kategorie** — muss einer der bestehenden Werte sein: `Schnell`, `Asiatisch`,
-  `Indisch`, `Bowls`, `Backen`. Passt keine wirklich, sieh Schritt 4.
+- **Kategorien (eine oder mehrere)** — ein Rezept kann zu mehreren Rezept-Kategorien
+  gehören (`categories: string[]`), z. B. ist "Pasta Arrabbiata" sowohl `Italienisch`
+  als auch `Pasta` und `Schnell`. Muss einer oder mehrere der bestehenden Werte sein:
+  `Schnell`, `Asiatisch`, `Indisch`, `Italienisch`, `Pasta`, `Mexikanisch`,
+  `Suppen & Eintopf`, `Bowls`, `Street Food`, `Backwaren & Dessert`. Nimm ruhig
+  mehrere, wenn es wirklich passt — aber nicht künstlich aufblähen, nur setzen was
+  tatsächlich zutrifft. Passt keine wirklich, sieh Schritt 4.
 - **Minuten** (Gesamtzeit, als Zahl)
 - **Beschreibung** — ein kurzer, appetitanregender Satz auf Deutsch
 - **Zutaten** — jede mit `name`, `amount`, `unit`, `category`. Sieh Abschnitt
@@ -81,11 +86,14 @@ würde aus dem Rahmen fallen.
 
 ## 4. Neue Kategorie? Nur wenn wirklich nötig
 
-Die fünf Rezept-Kategorien (`Schnell`, `Asiatisch`, `Indisch`, `Bowls`, `Backen`)
-erzeugen direkt die Filter-Chips auf dem Rezepte-Screen. Bevor du eine neue
-hinzufügst, prüf, ob eine bestehende wirklich nicht passt — mehr Kategorien heißt
-mehr Chips in einer Reihe, die schon auf dem Handy an der Kante beschnitten wird.
-Falls doch nötig, an zwei Stellen ergänzen (beide müssen übereinstimmen):
+Die zehn Rezept-Kategorien (`Schnell`, `Asiatisch`, `Indisch`, `Italienisch`, `Pasta`,
+`Mexikanisch`, `Suppen & Eintopf`, `Bowls`, `Street Food`, `Backwaren & Dessert`)
+erzeugen direkt die Filter-Chips auf dem Rezepte-Screen, in dieser Reihenfolge. Bevor
+du eine neue hinzufügst, prüf, ob eine bestehende wirklich nicht passt — dank
+Mehrfachkategorien reicht das oft schon aus (z. B. `Suppen & Eintopf` + `Asiatisch`
+statt einer neuen "Ramen"-Kategorie). Falls doch nötig, an zwei Stellen ergänzen
+(beide müssen übereinstimmen), und häng die neue Kategorie sinnvoll einsortiert ein,
+nicht einfach hinten dran:
 
 1. `RecipeCategory`-Union in `src/data/types.ts`
 2. `RECIPE_CATEGORIES`-Array in `src/data/recipes.ts`
@@ -114,6 +122,6 @@ betroffene Zeile fixen und erneut prüfen, bevor du fertig meldest.
 Ein `git push` auf `main` im Repo `StubenBunker/kochbuch` löst automatisch ein
 Deployment über GitHub Actions aus (siehe `.github/workflows/deploy.yml`) — die
 Web-App unter https://stubenbunker.github.io/kochbuch/ aktualisiert sich von selbst,
-kein manueller Schritt nötig. Frag den Nutzer, ob du committen und pushen sollst,
-statt es automatisch zu tun (Push in ein öffentliches Repo ist eine Aktion, die
-Bestätigung braucht).
+kein manueller Schritt nötig. Der Nutzer hat explizit gesagt, dass direkt gepusht
+werden darf, ohne vorher zu fragen — also committen und pushen, sobald `tsc` sauber
+durchläuft.

@@ -70,7 +70,7 @@ export default function RecipeDetailScreen() {
 
         <View style={styles.content}>
           <Text style={styles.eyebrow}>
-            {recipe.category} · {recipe.minutes} Min
+            {recipe.categories.join(', ')} · {recipe.minutes} Min
           </Text>
           <Text style={styles.title}>{recipe.title}</Text>
           <Text style={styles.description}>{recipe.description}</Text>

@@ -64,7 +64,7 @@ export function RecipeCard({ recipe, inWeek, isFav, onToggleFav, onToggleWeek }:
         {recipe.title}
       </Text>
       <Text style={styles.meta}>
-        {recipe.minutes} Min · {recipe.category}
+        {recipe.minutes} Min · {recipe.categories.join(', ')}
       </Text>
     </Pressable>
   );

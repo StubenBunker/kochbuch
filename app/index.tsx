@@ -16,7 +16,7 @@ export default function RezepteScreen() {
   const toggleFav = useHousehold((s) => s.toggleFav);
 
   const filtered = useMemo(
-    () => (filter === 'Alle' ? recipes : recipes.filter((r) => r.category === filter)),
+    () => (filter === 'Alle' ? recipes : recipes.filter((r) => r.categories.some((c) => c === filter))),
     [filter],
   );
 

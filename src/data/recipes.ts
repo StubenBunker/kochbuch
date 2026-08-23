@@ -14,15 +14,20 @@ export const RECIPE_CATEGORIES = [
   'Schnell',
   'Asiatisch',
   'Indisch',
+  'Italienisch',
+  'Pasta',
+  'Mexikanisch',
+  'Suppen & Eintopf',
   'Bowls',
-  'Backen',
+  'Street Food',
+  'Backwaren & Dessert',
 ] as const;
 
 export const recipes: Recipe[] = [
   {
     id: 'dal',
     title: 'Rote-Linsen-Dal',
-    category: 'Indisch',
+    categories: ['Indisch'],
     minutes: 30,
     tint: '#E8C79A',
     description:
@@ -47,7 +52,7 @@ export const recipes: Recipe[] = [
   {
     id: 'ramen',
     title: 'Erdnuss-Ramen',
-    category: 'Asiatisch',
+    categories: ['Asiatisch', 'Suppen & Eintopf'],
     minutes: 25,
     tint: '#D9A98C',
     description: 'Tiefe Brühe aus Erdnussmus, Miso und Limette – in 25 Minuten fertig.',
@@ -71,7 +76,7 @@ export const recipes: Recipe[] = [
   {
     id: 'bowl',
     title: 'Ofengemüse-Bowl',
-    category: 'Bowls',
+    categories: ['Bowls'],
     minutes: 40,
     tint: '#C9B98F',
     description: 'Geröstetes Wurzelgemüse, Hirse und Tahin-Dressing. Meal-Prep-tauglich.',
@@ -95,7 +100,7 @@ export const recipes: Recipe[] = [
   {
     id: 'curry',
     title: 'Kichererbsen-Curry',
-    category: 'Indisch',
+    categories: ['Indisch'],
     minutes: 35,
     tint: '#DBC08B',
     description:
@@ -120,7 +125,7 @@ export const recipes: Recipe[] = [
   {
     id: 'pasta',
     title: 'Pasta Arrabbiata',
-    category: 'Schnell',
+    categories: ['Italienisch', 'Pasta', 'Schnell'],
     minutes: 20,
     tint: '#D08F76',
     description: 'Scharf, schnell, immer richtig. Fünf Zutaten plus Salz.',
@@ -142,7 +147,7 @@ export const recipes: Recipe[] = [
   {
     id: 'banhmi',
     title: 'Tofu-Bánh-mì',
-    category: 'Asiatisch',
+    categories: ['Asiatisch', 'Street Food'],
     minutes: 30,
     tint: '#C4B27E',
     description: 'Marinierter Tofu, schnell eingelegte Möhre und viel Koriander im Baguette.',
@@ -166,7 +171,7 @@ export const recipes: Recipe[] = [
   {
     id: 'suppe',
     title: 'Kürbis-Kokos-Suppe',
-    category: 'Schnell',
+    categories: ['Suppen & Eintopf', 'Schnell'],
     minutes: 25,
     tint: '#E0A97A',
     description: 'Samtig, mit Ingwer und geröstetem Kürbiskernöl.',
@@ -189,7 +194,7 @@ export const recipes: Recipe[] = [
   {
     id: 'falafel',
     title: 'Falafel-Teller',
-    category: 'Schnell',
+    categories: ['Street Food'],
     minutes: 45,
     tint: '#B9AE84',
     description: 'Ofen-Falafel mit Kräuterkern, dazu Hummus und Tomatensalat.',
@@ -212,7 +217,7 @@ export const recipes: Recipe[] = [
   {
     id: 'brot',
     title: 'Schoko-Bananenbrot',
-    category: 'Backen',
+    categories: ['Backwaren & Dessert'],
     minutes: 60,
     tint: '#C79E86',
     description: 'Sehr saftig, ohne Ei – reife Bananen machen die Arbeit.',
