@@ -7,15 +7,16 @@ import { Header } from '../src/components/Header';
 import { EmptyState } from '../src/components/EmptyState';
 import { PortionStepper } from '../src/components/PortionStepper';
 import { RecipePhoto } from '../src/components/RecipePhoto';
-import { colors, fonts, radii } from '../src/theme/tokens';
+import { colors, radii } from '../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
-import { buildShoppingList } from '../src/utils/shopping';
 
 export default function WocheScreen() {
   const plan = useHousehold((s) => s.plan);
   const portions = useHousehold((s) => s.portions);
+  const cart = useHousehold((s) => s.cart);
   const setPortion = useHousehold((s) => s.setPortion);
   const removeFromPlan = useHousehold((s) => s.removeFromPlan);
+  const toggleCart = useHousehold((s) => s.toggleCart);
   const portionFor = (id: string) => portions[id] ?? DEFAULT_PORTIONS;
 
   const planRecipes = useMemo(
@@ -24,10 +25,6 @@ export default function WocheScreen() {
   );
 
   const totalPortions = planRecipes.reduce((sum, r) => sum + portionFor(r.id), 0);
-  const shoppingLineCount = useMemo(
-    () => buildShoppingList(plan, portions, DEFAULT_PORTIONS).flatMap((g) => g.items).length,
-    [plan, portions],
-  );
 
   return (
     <View style={styles.screen}>
@@ -41,29 +38,53 @@ export default function WocheScreen() {
         <EmptyState lines={['Noch keine Rezepte geplant.', 'Tippe das + in der Galerie.']} />
       ) : (
         <ScrollView contentContainerStyle={styles.list} bounces={false}>
-          {planRecipes.map((recipe) => (
-            <View key={recipe.id} style={styles.rowCard}>
-              <RecipePhoto recipe={recipe} style={styles.thumb} showCaption={false} />
-              <View style={styles.rowBody}>
-                <Text style={styles.rowTitle} numberOfLines={2}>
-                  {recipe.title}
-                </Text>
-                <PortionStepper
-                  variant="plan"
-                  value={portionFor(recipe.id)}
-                  onDecrease={() => setPortion(recipe.id, -1)}
-                  onIncrease={() => setPortion(recipe.id, 1)}
-                />
-              </View>
-              <Pressable hitSlop={12} onPress={() => removeFromPlan(recipe.id)} style={styles.removeButton}>
-                <Ionicons name="close" size={18} color={colors.disabled} />
+          {planRecipes.map((recipe) => {
+            const inCart = !!cart[recipe.id];
+            return (
+              <Pressable
+                key={recipe.id}
+                style={styles.rowCard}
+                onPress={() => router.push(`/recipe/${recipe.id}`)}
+              >
+                <RecipePhoto recipe={recipe} style={styles.thumb} showCaption={false} />
+                <View style={styles.rowBody}>
+                  <Text style={styles.rowTitle} numberOfLines={2}>
+                    {recipe.title}
+                  </Text>
+                  <PortionStepper
+                    variant="plan"
+                    value={portionFor(recipe.id)}
+                    onDecrease={() => setPortion(recipe.id, -1)}
+                    onIncrease={() => setPortion(recipe.id, 1)}
+                  />
+                </View>
+                <Pressable
+                  hitSlop={12}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    toggleCart(recipe.id);
+                  }}
+                  style={styles.iconButton}
+                >
+                  <Ionicons
+                    name={inCart ? 'cart' : 'cart-outline'}
+                    size={19}
+                    color={inCart ? colors.accent : colors.disabled}
+                  />
+                </Pressable>
+                <Pressable
+                  hitSlop={12}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    removeFromPlan(recipe.id);
+                  }}
+                  style={styles.iconButton}
+                >
+                  <Ionicons name="close" size={18} color={colors.disabled} />
+                </Pressable>
               </Pressable>
-            </View>
-          ))}
-
-          <Pressable style={styles.cta} onPress={() => router.replace('/liste')}>
-            <Text style={styles.ctaText}>Einkaufsliste ansehen · {shoppingLineCount} Zutaten</Text>
-          </Pressable>
+            );
+          })}
         </ScrollView>
       )}
     </View>
@@ -105,19 +126,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: colors.ink,
   },
-  removeButton: {
+  iconButton: {
     padding: 6,
-  },
-  cta: {
-    marginTop: 10,
-    backgroundColor: colors.accent,
-    borderRadius: radii.lg,
-    paddingVertical: 17,
-    alignItems: 'center',
-  },
-  ctaText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.onAccent,
   },
 });

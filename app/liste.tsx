@@ -11,12 +11,14 @@ import { formatAmount } from '../src/utils/format';
 export default function ListeScreen() {
   const plan = useHousehold((s) => s.plan);
   const portions = useHousehold((s) => s.portions);
+  const cart = useHousehold((s) => s.cart);
   const checked = useHousehold((s) => s.checked);
   const toggleChecked = useHousehold((s) => s.toggleChecked);
 
+  const cartIds = useMemo(() => plan.filter((id) => cart[id]), [plan, cart]);
   const groups = useMemo(
-    () => buildShoppingList(plan, portions, DEFAULT_PORTIONS),
-    [plan, portions],
+    () => buildShoppingList(cartIds, portions, DEFAULT_PORTIONS),
+    [cartIds, portions],
   );
   const allItems = useMemo(() => groups.flatMap((g) => g.items), [groups]);
   const checkedCount = allItems.filter((item) => checked[item.key]).length;
@@ -27,7 +29,7 @@ export default function ListeScreen() {
     <View style={styles.screen}>
       <Header
         title="Einkaufsliste"
-        subtitle={`${checkedCount} VON ${total} ERLEDIGT · AUS ${plan.length} REZEPTEN`}
+        subtitle={`${checkedCount} VON ${total} ERLEDIGT · AUS ${cartIds.length} REZEPTEN`}
         bottomSpacing={14}
       >
         <View style={styles.progressTrack}>
@@ -37,7 +39,11 @@ export default function ListeScreen() {
 
       {total === 0 ? (
         <EmptyState
-          lines={['Die Liste füllt sich automatisch,', 'sobald Rezepte in der Woche sind.']}
+          lines={
+            plan.length === 0
+              ? ['Die Liste füllt sich automatisch,', 'sobald Rezepte in der Woche sind.']
+              : ['Wähle bei "Diese Woche" per Warenkorb-Symbol,', 'wofür du einkaufen willst.']
+          }
         />
       ) : (
         <ScrollView contentContainerStyle={styles.groups} bounces={false}>

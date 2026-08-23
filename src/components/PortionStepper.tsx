@@ -19,7 +19,10 @@ export function PortionStepper({ value, onDecrease, onIncrease, variant }: Props
     <View style={[styles.row, { gap }]}>
       <Pressable
         hitSlop={10}
-        onPress={onDecrease}
+        onPress={(e) => {
+          e.stopPropagation();
+          onDecrease();
+        }}
         style={[styles.circle, { width: circleSize, height: circleSize, borderRadius: circleSize / 2 }]}
       >
         <Ionicons name="remove" size={iconSize} color={colors.inkMuted} />
@@ -31,7 +34,10 @@ export function PortionStepper({ value, onDecrease, onIncrease, variant }: Props
       )}
       <Pressable
         hitSlop={10}
-        onPress={onIncrease}
+        onPress={(e) => {
+          e.stopPropagation();
+          onIncrease();
+        }}
         style={[styles.circle, { width: circleSize, height: circleSize, borderRadius: circleSize / 2 }]}
       >
         <Ionicons name="add" size={iconSize} color={colors.inkMuted} />

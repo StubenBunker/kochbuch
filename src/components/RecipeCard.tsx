@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import type { Recipe } from '../data/types';
@@ -13,9 +13,18 @@ type Props = {
   onToggleWeek: () => void;
 };
 
+const GUTTER = 18;
+const COLUMN_GAP = 14;
+
 export function RecipeCard({ recipe, inWeek, isFav, onToggleFav, onToggleWeek }: Props) {
+  const { width: windowWidth } = useWindowDimensions();
+  // Fixed width instead of flex:1 — otherwise a lone card left over in the last
+  // row (odd recipe count) stretches to fill the whole row instead of staying
+  // the same size as every other card.
+  const cardWidth = (windowWidth - GUTTER * 2 - COLUMN_GAP) / 2;
+
   return (
-    <Pressable style={styles.card} onPress={() => router.push(`/recipe/${recipe.id}`)}>
+    <Pressable style={{ width: cardWidth }} onPress={() => router.push(`/recipe/${recipe.id}`)}>
       <RecipePhoto recipe={recipe} style={styles.photo}>
         <Pressable
           hitSlop={8}
@@ -62,9 +71,6 @@ export function RecipeCard({ recipe, inWeek, isFav, onToggleFav, onToggleWeek }:
 }
 
 const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-  },
   photo: {
     height: 138,
     borderRadius: radii.lg,

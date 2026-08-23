@@ -13,6 +13,7 @@ export type HouseholdState = {
   portions: Record<string, number>;
   favs: Record<string, boolean>;
   checked: Record<string, boolean>;
+  cart: Record<string, boolean>;
 };
 
 type Store = HouseholdState & {
@@ -24,10 +25,16 @@ type Store = HouseholdState & {
   removeFromPlan: (id: string) => void;
   toggleFav: (id: string) => void;
   toggleChecked: (key: string) => void;
+  toggleCart: (id: string) => void;
 };
 
 function pick(s: HouseholdState): HouseholdState {
-  return { plan: s.plan, portions: s.portions, favs: s.favs, checked: s.checked };
+  return { plan: s.plan, portions: s.portions, favs: s.favs, checked: s.checked, cart: s.cart };
+}
+
+function withoutKey<T>(record: Record<string, T>, key: string): Record<string, T> {
+  const { [key]: _removed, ...rest } = record;
+  return rest;
 }
 
 let persistTimer: ReturnType<typeof setTimeout> | null = null;
@@ -48,6 +55,7 @@ export const useHousehold = create<Store>((set, get) => ({
   portions: {},
   favs: {},
   checked: {},
+  cart: {},
   hydrated: false,
   synced: false,
   portionFor: (id) => get().portions[id] ?? DEFAULT_PORTIONS,
@@ -55,8 +63,11 @@ export const useHousehold = create<Store>((set, get) => ({
     set((s) => {
       const inPlan = s.plan.includes(id);
       const plan = inPlan ? s.plan.filter((x) => x !== id) : [...s.plan, id];
-      schedulePersist(pick({ ...s, plan }));
-      return { plan };
+      // Newly planned recipes default into the shopping cart; leaving the plan
+      // also drops them from the cart so no stale selection lingers.
+      const cart = inPlan ? withoutKey(s.cart, id) : { ...s.cart, [id]: true };
+      schedulePersist(pick({ ...s, plan, cart }));
+      return { plan, cart };
     }),
   setPortion: (id, delta) =>
     set((s) => {
@@ -69,8 +80,9 @@ export const useHousehold = create<Store>((set, get) => ({
   removeFromPlan: (id) =>
     set((s) => {
       const plan = s.plan.filter((x) => x !== id);
-      schedulePersist(pick({ ...s, plan }));
-      return { plan };
+      const cart = withoutKey(s.cart, id);
+      schedulePersist(pick({ ...s, plan, cart }));
+      return { plan, cart };
     }),
   toggleFav: (id) =>
     set((s) => {
@@ -83,6 +95,12 @@ export const useHousehold = create<Store>((set, get) => ({
       const checked = { ...s.checked, [key]: !s.checked[key] };
       schedulePersist(pick({ ...s, checked }));
       return { checked };
+    }),
+  toggleCart: (id) =>
+    set((s) => {
+      const cart = { ...s.cart, [id]: !s.cart[id] };
+      schedulePersist(pick({ ...s, cart }));
+      return { cart };
     }),
 }));
 
@@ -113,6 +131,7 @@ export async function initHouseholdSync(): Promise<void> {
           portions: data.portions ?? {},
           favs: data.favs ?? {},
           checked: data.checked ?? {},
+          cart: data.cart ?? {},
         };
         useHousehold.setState({ ...next, synced: true });
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});

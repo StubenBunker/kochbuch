@@ -27,10 +27,12 @@ export function NavMenu() {
 
   const plan = useHousehold((s) => s.plan);
   const portions = useHousehold((s) => s.portions);
+  const cart = useHousehold((s) => s.cart);
   const checked = useHousehold((s) => s.checked);
 
   const weekCount = plan.length;
-  const listUnchecked = buildShoppingList(plan, portions, DEFAULT_PORTIONS)
+  const cartIds = plan.filter((id) => cart[id]);
+  const listUnchecked = buildShoppingList(cartIds, portions, DEFAULT_PORTIONS)
     .flatMap((g) => g.items)
     .filter((item) => !checked[item.key]).length;
 
