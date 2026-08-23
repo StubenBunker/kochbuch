@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
   },
   categoryRow: {
     gap: 8,
-    marginTop: -10,
   },
   categoryChip: {
     paddingVertical: 7,
