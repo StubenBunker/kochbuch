@@ -36,8 +36,8 @@ export default function TabsLayout() {
         },
         tabBarStyle: {
           position: 'absolute',
-          height: 50 + bottomInset,
-          paddingTop: 7,
+          height: 62 + bottomInset,
+          paddingTop: 11,
           paddingBottom: bottomInset,
           backgroundColor: 'transparent',
           borderTopWidth: 1,
