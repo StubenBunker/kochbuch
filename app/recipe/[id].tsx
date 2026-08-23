@@ -9,11 +9,13 @@ import { RecipePhoto } from '../../src/components/RecipePhoto';
 import { colors, fonts, radii } from '../../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
 import { formatAmount } from '../../src/utils/format';
+import { useBottomSafeArea } from '../../src/utils/safeArea';
 
 export default function RecipeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const recipe = findRecipe(id);
   const insets = useSafeAreaInsets();
+  const bottomInset = useBottomSafeArea();
 
   const plan = useHousehold((s) => s.plan);
   const favs = useHousehold((s) => s.favs);
@@ -106,7 +108,7 @@ export default function RecipeDetailScreen() {
       <LinearGradient
         colors={['rgba(246,243,236,0)', colors.background, colors.background]}
         locations={[0, 0.38, 1]}
-        style={[styles.ctaWrap, { paddingBottom: insets.bottom + 16 }]}
+        style={[styles.ctaWrap, { paddingBottom: bottomInset + 16 }]}
       >
         <Pressable
           style={[styles.cta, { backgroundColor: inWeek ? colors.surface : colors.accent }]}

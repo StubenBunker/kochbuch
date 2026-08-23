@@ -2,13 +2,13 @@ import { StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts } from '../../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
 import { buildShoppingList } from '../../src/utils/shopping';
+import { useBottomSafeArea } from '../../src/utils/safeArea';
 
 export default function TabsLayout() {
-  const insets = useSafeAreaInsets();
+  const bottomInset = useBottomSafeArea();
   const plan = useHousehold((s) => s.plan);
   const portions = useHousehold((s) => s.portions);
   const checked = useHousehold((s) => s.checked);
@@ -36,9 +36,9 @@ export default function TabsLayout() {
         },
         tabBarStyle: {
           position: 'absolute',
-          height: 62 + insets.bottom,
+          height: 62 + bottomInset,
           paddingTop: 11,
-          paddingBottom: insets.bottom,
+          paddingBottom: bottomInset,
           backgroundColor: 'transparent',
           borderTopWidth: 1,
           borderTopColor: 'rgba(23,21,15,0.08)',
