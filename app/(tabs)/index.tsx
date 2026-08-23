@@ -38,6 +38,7 @@ export default function RezepteScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={styles.chipScroll}
         contentContainerStyle={styles.chipRow}
       >
         {CHIPS.map((chip) => {
@@ -94,6 +95,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.mono,
     fontSize: 11.5,
     color: colors.onAccent,
+  },
+  chipScroll: {
+    flexGrow: 0,
+    flexShrink: 0,
   },
   chipRow: {
     flexDirection: 'row',
