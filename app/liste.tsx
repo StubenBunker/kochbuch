@@ -40,7 +40,7 @@ export default function ListeScreen() {
           lines={['Die Liste füllt sich automatisch,', 'sobald Rezepte in der Woche sind.']}
         />
       ) : (
-        <ScrollView contentContainerStyle={styles.groups}>
+        <ScrollView contentContainerStyle={styles.groups} bounces={false}>
           {groups.map((group) => (
             <View key={group.category}>
               <View style={styles.groupHeader}>

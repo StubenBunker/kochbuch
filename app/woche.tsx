@@ -40,7 +40,7 @@ export default function WocheScreen() {
       {planRecipes.length === 0 ? (
         <EmptyState lines={['Noch keine Rezepte geplant.', 'Tippe das + in der Galerie.']} />
       ) : (
-        <ScrollView contentContainerStyle={styles.list}>
+        <ScrollView contentContainerStyle={styles.list} bounces={false}>
           {planRecipes.map((recipe) => (
             <View key={recipe.id} style={styles.rowCard}>
               <RecipePhoto recipe={recipe} style={styles.thumb} showCaption={false} />

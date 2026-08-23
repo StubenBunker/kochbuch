@@ -27,6 +27,7 @@ export default function RezepteScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        bounces={false}
         style={styles.chipScroll}
         contentContainerStyle={styles.chipRow}
       >
@@ -53,6 +54,7 @@ export default function RezepteScreen() {
         data={filtered}
         keyExtractor={(r) => r.id}
         numColumns={2}
+        bounces={false}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.grid}
         renderItem={({ item }) => (

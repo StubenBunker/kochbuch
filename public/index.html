@@ -16,9 +16,14 @@
         height: 100%;
         background-color: #f6f3ec;
       }
-      /* These styles disable body scrolling if you are using <ScrollView> */
+      /* These styles disable body scrolling if you are using <ScrollView>. Also
+         pinned with position:fixed — on iOS Safari, overflow:hidden alone doesn't
+         reliably stop the whole page from rubber-band bouncing, which briefly
+         exposes unstyled space beyond the page edges. */
       body {
         overflow: hidden;
+        position: fixed;
+        width: 100%;
       }
       /* These styles make the root element full-height */
       #root {

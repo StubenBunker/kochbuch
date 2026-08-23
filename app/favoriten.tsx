@@ -26,6 +26,7 @@ export default function FavoritenScreen() {
           data={favRecipes}
           keyExtractor={(r) => r.id}
           numColumns={2}
+          bounces={false}
           columnWrapperStyle={styles.row}
           contentContainerStyle={styles.grid}
           renderItem={({ item }) => (
