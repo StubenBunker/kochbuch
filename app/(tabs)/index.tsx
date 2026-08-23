@@ -25,7 +25,7 @@ export default function RezepteScreen() {
     <View style={styles.screen}>
       <Header
         title="Kochbuch"
-        subtitle={`${recipes.length} VEGANE REZEPTE`}
+        subtitle={`${recipes.length} REZEPTE`}
         right={
           plan.length > 0 ? (
             <Pressable style={styles.weekPill} onPress={() => router.navigate('/woche')}>
@@ -48,7 +48,12 @@ export default function RezepteScreen() {
               onPress={() => setFilter(chip)}
               style={[styles.chip, active && styles.chipActive]}
             >
-              <Text style={[styles.chipText, active && styles.chipTextActive]}>{chip}</Text>
+              <Text
+                style={[styles.chipText, active && styles.chipTextActive]}
+                numberOfLines={1}
+              >
+                {chip}
+              </Text>
             </Pressable>
           );
         })}
@@ -91,11 +96,16 @@ const styles = StyleSheet.create({
     color: colors.onAccent,
   },
   chipRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     paddingHorizontal: 18,
     paddingBottom: 16,
   },
   chip: {
+    flexShrink: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 999,
@@ -108,6 +118,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: 13,
+    lineHeight: 16,
     fontWeight: '500',
     color: colors.inkMuted,
   },

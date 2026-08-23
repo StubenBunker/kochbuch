@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { getFirestoreDb, ensureSignedIn, isFirebaseConfigured } from '../lib/firebase';
 
-export const DEFAULT_PORTIONS = 2;
+export const DEFAULT_PORTIONS = 4;
 const MAX_PORTIONS = 12;
 const STORAGE_KEY = 'kochbuch:household:v1';
 const HOUSEHOLD_DOC = 'shared';
