@@ -45,17 +45,21 @@ Das ist der Teil mit den meisten unsichtbaren Fallstricken:
   (siehe `src/utils/shopping.ts` und `app/recipe/[id].tsx`). Wenn ein Rezept "für 2
   Portionen: 200g Reis" angibt, trägst du `amount: 100` ein (200 ÷ 2), nicht 200.
   Frag im Zweifel nach, für wie viele Portionen die Original-Mengenangabe gilt.
-- **`category` ist eine von genau fünf Einkaufslisten-Kategorien**, keine freie
-  Beschreibung: `Obst & Gemüse`, `Trockenwaren`, `Tiefkühl`, `Gewürze`, `Sonstiges`.
-  Diese Kategorie steuert die Gruppierung auf dem Einkaufsliste-Screen — es gibt
-  keinen automatischen Fallback, jede Zutat muss eine davon bekommen. Als Faustregel:
+- **`category` ist eine von genau sieben Einkaufslisten-Kategorien**, keine freie
+  Beschreibung: `Obst & Gemüse`, `Konserven`, `Trockenwaren`, `Tiefkühl`, `Gewürze`,
+  `Drogerie`, `Sonstiges`. Diese Kategorie steuert die Gruppierung auf dem
+  Einkaufsliste-Screen — es gibt keinen automatischen Fallback, jede Zutat muss eine
+  davon bekommen. Als Faustregel:
   - frisches Gemüse/Obst/Kräuter → `Obst & Gemüse`
-  - Nudeln, Reis, Hülsenfrüchte, Mehl, Konserven mit langer Haltbarkeit → `Trockenwaren`
+  - Dosen, Gläser, Eingemachtes (Tomaten, Bohnen, Mais, Kokosmilch in der Dose …) → `Konserven`
+  - Nudeln, Reis, Hülsenfrüchte trocken, Mehl, Backzutaten → `Trockenwaren`
   - alles aus dem Gefrierfach → `Tiefkühl`
   - Gewürze/getrocknete Kräuter → `Gewürze`
+  - Non-Food: Küchenrolle, Spülmittel, Alufolie o.Ä. (kommt meist nur bei manuell
+    hinzugefügten Artikeln vor, selten bei Rezept-Zutaten) → `Drogerie`
   - Saucen, Pasten, Öle, Tofu, alles andere → `Sonstiges`
-  - Am Dateianfang von `recipes.ts` gibt es die Kurz-Konstanten `G`/`T`/`K`/`W`/`S`
-    für genau diese fünf — nutze sie, das ist der bestehende Stil.
+  - Am Dateianfang von `recipes.ts` gibt es die Kurz-Konstanten `G`/`C`/`T`/`K`/`W`/`D`/`S`
+    für genau diese sieben — nutze sie, das ist der bestehende Stil.
 - **`unit`** ist ein freier String, aber halte dich an die im Projekt schon verwendeten
   Einheiten für Konsistenz: `g`, `ml`, `Stk`, `TL`, `EL`, `Zehe`.
 

@@ -2,9 +2,11 @@ import type { ImageSourcePropType } from 'react-native';
 
 export type ShoppingCategory =
   | 'Obst & Gemüse'
+  | 'Konserven'
   | 'Trockenwaren'
   | 'Tiefkühl'
   | 'Gewürze'
+  | 'Drogerie'
   | 'Sonstiges';
 
 export type RecipeCategory =

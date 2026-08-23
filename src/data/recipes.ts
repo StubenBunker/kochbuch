@@ -1,12 +1,14 @@
 import type { Recipe } from './types';
 
 const G = 'Obst & Gemüse' as const;
+const C = 'Konserven' as const;
 const T = 'Trockenwaren' as const;
 const K = 'Tiefkühl' as const;
 const W = 'Gewürze' as const;
+const D = 'Drogerie' as const;
 const S = 'Sonstiges' as const;
 
-export const SHOPPING_CATEGORY_ORDER = [G, T, K, W, S] as const;
+export const SHOPPING_CATEGORY_ORDER = [G, C, T, K, W, D, S] as const;
 
 export const RECIPE_CATEGORIES = [
   'Schnell',
