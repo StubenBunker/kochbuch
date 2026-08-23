@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { findRecipe } from '../../src/data/recipes';
 import { PortionStepper } from '../../src/components/PortionStepper';
+import { RecipePhoto } from '../../src/components/RecipePhoto';
 import { colors, fonts, radii } from '../../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
 import { formatAmount } from '../../src/utils/format';
@@ -35,9 +36,7 @@ export default function RecipeDetailScreen() {
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.scrollBody} bounces={false}>
-        <View style={[styles.hero, { backgroundColor: recipe.tint }]}>
-          <Text style={styles.heroCaption}>Foto: {recipe.title}</Text>
-
+        <RecipePhoto recipe={recipe} style={styles.hero} captionSize={11}>
           <Pressable
             style={[styles.circleButton, { top: insets.top + 18, left: 16 }]}
             onPress={() => router.back()}
@@ -55,7 +54,7 @@ export default function RecipeDetailScreen() {
               color={isFav ? colors.terracotta : colors.inkMuted}
             />
           </Pressable>
-        </View>
+        </RecipePhoto>
 
         <View style={styles.content}>
           <Text style={styles.eyebrow}>
@@ -139,11 +138,6 @@ const styles = StyleSheet.create({
     height: 300,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  heroCaption: {
-    fontFamily: fonts.mono,
-    fontSize: 11,
-    color: 'rgba(23,21,15,0.42)',
   },
   circleButton: {
     position: 'absolute',

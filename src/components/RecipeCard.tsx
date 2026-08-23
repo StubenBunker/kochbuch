@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import type { Recipe } from '../data/types';
 import { colors, fonts, radii, shadow } from '../theme/tokens';
+import { RecipePhoto } from './RecipePhoto';
 
 type Props = {
   recipe: Recipe;
@@ -15,9 +16,7 @@ type Props = {
 export function RecipeCard({ recipe, inWeek, isFav, onToggleFav, onToggleWeek }: Props) {
   return (
     <Pressable style={styles.card} onPress={() => router.push(`/recipe/${recipe.id}`)}>
-      <View style={[styles.photo, { backgroundColor: recipe.tint }]}>
-        <Text style={styles.photoCaption}>Foto: {recipe.title}</Text>
-
+      <RecipePhoto recipe={recipe} style={styles.photo}>
         <Pressable
           hitSlop={8}
           onPress={(e) => {
@@ -50,7 +49,7 @@ export function RecipeCard({ recipe, inWeek, isFav, onToggleFav, onToggleWeek }:
             color={inWeek ? colors.onAccent : colors.ink}
           />
         </Pressable>
-      </View>
+      </RecipePhoto>
 
       <Text style={styles.title} numberOfLines={2}>
         {recipe.title}
@@ -72,11 +71,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  photoCaption: {
-    fontFamily: fonts.mono,
-    fontSize: 10,
-    color: 'rgba(23,21,15,0.42)',
   },
   favButton: {
     position: 'absolute',

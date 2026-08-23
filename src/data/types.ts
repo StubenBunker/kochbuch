@@ -1,3 +1,5 @@
+import type { ImageSourcePropType } from 'react-native';
+
 export type ShoppingCategory =
   | 'Obst & Gemüse'
   | 'Trockenwaren'
@@ -25,7 +27,7 @@ export type Recipe = {
   category: RecipeCategory;
   minutes: number;
   tint: string;
-  photo?: string;
+  photo?: ImageSourcePropType;
   description: string;
   ingredients: Ingredient[];
   steps: string[];

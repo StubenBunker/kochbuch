@@ -22,6 +22,11 @@ Frag nach, was fehlt, statt zu raten. Für ein vollständiges Rezept brauchst du
   "Zutaten korrekt erfassen" unten, das ist der Teil, bei dem am ehesten was schiefgeht.
 - **Zubereitungsschritte** — kurze, direkte Imperativsätze auf Deutsch ("Zwiebel fein
   würfeln, in Öl glasig dünsten."), als Array von Strings.
+- **Foto (optional)** — hat der Nutzer eine Bilddatei? Falls ja, sieh
+  `assets/recipes/README.md`: Datei nach `assets/recipes/<id>.jpg` legen und
+  `photo: require('../../assets/recipes/<id>.jpg')` im Rezept-Objekt setzen. Ohne
+  Foto bleibt das Feld einfach weg — die Karte zeigt dann automatisch den
+  Tint-Platzhalter.
 
 Wenn der Nutzer ein Rezept einfach als Fließtext einfügt (z. B. aus einer Kochseite
 kopiert), extrahiere daraus die Felder selbst und bestätige kurz die Zusammenfassung,

@@ -6,6 +6,7 @@ import { findRecipe } from '../../src/data/recipes';
 import { Header } from '../../src/components/Header';
 import { EmptyState } from '../../src/components/EmptyState';
 import { PortionStepper } from '../../src/components/PortionStepper';
+import { RecipePhoto } from '../../src/components/RecipePhoto';
 import { colors, fonts, radii } from '../../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
 import { buildShoppingList } from '../../src/utils/shopping';
@@ -42,7 +43,7 @@ export default function WocheScreen() {
         <ScrollView contentContainerStyle={styles.list}>
           {planRecipes.map((recipe) => (
             <View key={recipe.id} style={styles.rowCard}>
-              <View style={[styles.thumb, { backgroundColor: recipe.tint }]} />
+              <RecipePhoto recipe={recipe} style={styles.thumb} showCaption={false} />
               <View style={styles.rowBody}>
                 <Text style={styles.rowTitle} numberOfLines={2}>
                   {recipe.title}
