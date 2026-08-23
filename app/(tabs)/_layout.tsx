@@ -36,10 +36,10 @@ export default function TabsLayout() {
         },
         tabBarStyle: {
           position: 'absolute',
-          height: 62 + bottomInset,
-          paddingTop: 11,
+          height: 50 + bottomInset,
+          paddingTop: 7,
           paddingBottom: bottomInset,
-          backgroundColor: 'rgba(255,0,0,0.25)', // TEMP DEBUG — was 'transparent'
+          backgroundColor: 'transparent',
           borderTopWidth: 1,
           borderTopColor: 'rgba(23,21,15,0.08)',
         },
@@ -52,7 +52,7 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'Rezepte',
-          tabBarIcon: ({ color, size }) => <Ionicons name="grid-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="grid-outline" size={17} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -60,7 +60,7 @@ export default function TabsLayout() {
         options={{
           title: 'Woche',
           tabBarBadge: weekCount > 0 ? weekCount : undefined,
-          tabBarIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="calendar-outline" size={17} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -68,14 +68,14 @@ export default function TabsLayout() {
         options={{
           title: 'Liste',
           tabBarBadge: listUnchecked > 0 ? listUnchecked : undefined,
-          tabBarIcon: ({ color, size }) => <Ionicons name="list-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="list-outline" size={17} color={color} />,
         }}
       />
       <Tabs.Screen
         name="favoriten"
         options={{
           title: 'Favoriten',
-          tabBarIcon: ({ color, size }) => <Ionicons name="heart-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="heart-outline" size={17} color={color} />,
         }}
       />
     </Tabs>

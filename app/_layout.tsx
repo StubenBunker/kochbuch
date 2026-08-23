@@ -8,7 +8,6 @@ import { useFonts, InstrumentSerif_400Regular } from '@expo-google-fonts/instrum
 import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono';
 import { colors } from '../src/theme/tokens';
 import { initHouseholdSync } from '../src/store/household';
-import { DebugOverlay } from '../src/components/DebugOverlay';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -33,7 +32,6 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayout}>
       <SafeAreaProvider>
         <StatusBar style="dark" />
-        <DebugOverlay />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="recipe/[id]" options={{ presentation: 'modal' }} />
