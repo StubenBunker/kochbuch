@@ -29,7 +29,7 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayout}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }} onLayout={onLayout}>
       <SafeAreaProvider>
         <StatusBar style="dark" />
         <Stack
