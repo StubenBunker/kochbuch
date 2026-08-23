@@ -57,7 +57,7 @@ export function NavMenu() {
               return (
                 <Pressable
                   key={section.path}
-                  style={styles.row}
+                  style={[styles.row, active && styles.rowActive]}
                   onPress={() => {
                     setOpen(false);
                     router.replace(section.path);
@@ -76,7 +76,6 @@ export function NavMenu() {
                       <Text style={styles.badgeText}>{badge}</Text>
                     </View>
                   )}
-                  {active && <Ionicons name="checkmark" size={16} color={colors.accent} />}
                 </Pressable>
               );
             })}
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.lg,
     borderWidth: 1,
     borderColor: colors.hairline,
-    paddingVertical: 6,
+    padding: 6,
     ...shadow.card,
   },
   row: {
@@ -120,7 +119,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     paddingVertical: 11,
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
+    borderRadius: radii.sm,
+  },
+  rowActive: {
+    backgroundColor: 'rgba(46,94,67,0.12)',
   },
   rowLabel: {
     flex: 1,
