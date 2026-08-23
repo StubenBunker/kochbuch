@@ -39,7 +39,7 @@ export default function TabsLayout() {
           height: 62 + bottomInset,
           paddingTop: 11,
           paddingBottom: bottomInset,
-          backgroundColor: 'transparent',
+          backgroundColor: 'rgba(255,0,0,0.25)', // TEMP DEBUG — was 'transparent'
           borderTopWidth: 1,
           borderTopColor: 'rgba(23,21,15,0.08)',
         },
