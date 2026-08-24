@@ -1,6 +1,13 @@
+import { Platform } from 'react-native';
 import { initializeApp, getApps } from 'firebase/app';
 import * as FirebaseAuth from 'firebase/auth';
-import { initializeAuth, signInAnonymously, type Auth, type Persistence } from 'firebase/auth';
+import {
+  initializeAuth,
+  signInAnonymously,
+  browserLocalPersistence,
+  type Auth,
+  type Persistence,
+} from 'firebase/auth';
 import { initializeFirestore, type Firestore } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
@@ -15,10 +22,15 @@ type FirebaseConfig = {
 };
 
 // `getReactNativePersistence` ships in Firebase's React Native build (resolved at runtime via
-// Metro's package-export conditions) but is missing from the published `firebase/auth` types.
-const { getReactNativePersistence } = FirebaseAuth as typeof FirebaseAuth & {
-  getReactNativePersistence: (storage: typeof AsyncStorage) => Persistence;
-};
+// Metro's package-export conditions) but is missing from the published `firebase/auth` types —
+// and from the web build entirely, since the app runs as a PWA there instead.
+function resolvePersistence(): Persistence {
+  if (Platform.OS === 'web') return browserLocalPersistence;
+  const { getReactNativePersistence } = FirebaseAuth as typeof FirebaseAuth & {
+    getReactNativePersistence: (storage: typeof AsyncStorage) => Persistence;
+  };
+  return getReactNativePersistence(AsyncStorage);
+}
 
 const extra = (Constants.expoConfig?.extra ?? {}) as { firebase?: Partial<FirebaseConfig> };
 const config = extra.firebase;
@@ -34,7 +46,7 @@ if (isFirebaseConfigured) {
   const app = getApps().length ? getApps()[0] : initializeApp(config as FirebaseConfig);
   firestore = initializeFirestore(app, {});
   auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
+    persistence: resolvePersistence(),
   });
 }
 

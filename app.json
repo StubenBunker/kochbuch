@@ -39,12 +39,12 @@
     },
     "extra": {
       "firebase": {
-        "apiKey": "",
-        "authDomain": "",
-        "projectId": "",
-        "storageBucket": "",
-        "messagingSenderId": "",
-        "appId": ""
+        "apiKey": "AIzaSyBuqUiYiHFBtrwjHi7Kb2Mt6OBy4AiP8mk",
+        "authDomain": "noi-apps.firebaseapp.com",
+        "projectId": "noi-apps",
+        "storageBucket": "noi-apps.firebasestorage.app",
+        "messagingSenderId": "875478674183",
+        "appId": "1:875478674183:web:7231328fcc1cd9098c33a2"
       }
     }
   }
