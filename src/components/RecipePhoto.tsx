@@ -16,7 +16,11 @@ export function RecipePhoto({ recipe, style, captionSize = 10, showCaption = tru
   return (
     <View style={[styles.frame, style, { backgroundColor: recipe.tint }]}>
       {recipe.photo ? (
-        <Image source={recipe.photo} style={StyleSheet.absoluteFill} resizeMode="cover" />
+        <Image
+          source={recipe.photo}
+          style={[StyleSheet.absoluteFill, { width: '100%', height: '100%' }]}
+          resizeMode="cover"
+        />
       ) : showCaption ? (
         <Text style={[styles.caption, { fontSize: captionSize }]}>Foto: {recipe.title}</Text>
       ) : null}

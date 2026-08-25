@@ -244,6 +244,7 @@ export const recipes: Recipe[] = [
     categories: ['Italienisch', 'Pasta'],
     minutes: 60,
     tint: '#CBA378',
+    photo: require('../../assets/recipes/rigatoni.jpg'),
     description:
       'Italienischer Nudelauflauf mit veganem Hack, Erbsen und cremiger Käse-Béchamel aus dem Ofen.',
     ingredients: [
@@ -284,6 +285,7 @@ export const recipes: Recipe[] = [
     categories: ['Pasta', 'Schnell'],
     minutes: 20,
     tint: '#D6B98C',
+    photo: require('../../assets/recipes/spaghettini.jpg'),
     description:
       'Nussig-buttrige Spaghettini mit gebräunter veganer Butter, Mandelmus und frischer Zitronen-Mandel-Gremolata.',
     ingredients: [
@@ -315,6 +317,7 @@ export const recipes: Recipe[] = [
     categories: ['Asiatisch', 'Schnell'],
     minutes: 20,
     tint: '#B98F6B',
+    photo: require('../../assets/recipes/udon.jpg'),
     description:
       'Warme Udonnudeln mit zischend heißem Erdnussöl, Sojasoße und knusprigen Tofu-Erdnuss-Bröseln.',
     ingredients: [
