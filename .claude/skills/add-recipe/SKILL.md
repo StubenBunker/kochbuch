@@ -114,7 +114,7 @@ aus, direkt im Chat, mit dem Rezept ausgefüllt:
 
 ```
 Professional food photography of [GERICHT], plated on a Motel a Miio "Areia"
-large plate in pink — handmade stoneware with a glossy, mottled pink-to-terracotta
+large plate in [TELLERFARBE] — handmade stoneware with a glossy, mottled
 reactive glaze radiating from the rim, cream-white base. Visible ingredients:
 [ZUTATENLISTE, kommagetrennt]. Shot from a 45-degree angle, soft natural window
 light from the left, shallow depth of field. Composition: the plate centered
@@ -131,12 +131,18 @@ high detail, editorial food magazine style.
 
 `[GERICHT]` ist der Rezepttitel auf Englisch beschrieben, `[ZUTATENLISTE]` die
 Haupt-Zutaten (nicht jede Kleinigkeit wie Salz/Gewürze, sondern die visuell
-erkennbaren) auf Englisch, kommagetrennt. Falls das Bildgenerierungs-Tool ein
-Seitenverhältnis einstellen lässt, empfiehl **4:3 (landschaft)** oder **1:1**
-— beides liegt näher an den Zielrahmen der App (Karte ca. 1.4:1, Hero-Bild ca.
-1.4:1) als ein sehr breites Kinoformat und braucht dadurch weniger Zuschnitt.
-Sobald der Nutzer ein fertiges Bild hat, sieh Schritt 1 „Foto (optional)"
-oben, um es einzubinden.
+erkennbaren) auf Englisch, kommagetrennt. `[TELLERFARBE]` ist **nicht immer
+Pink** — die Areia-Kollektion gibt es u. a. in `pink`, `sand`, `azure`,
+`mint`, `gray`, `black`, `white`, `rosé`; wähl pro Rezept die Farbe, die am
+meisten Kontrast zum Gericht gibt (z. B. hellere Töne wie sand/white/gray zu
+farbintensiven, dunklen Gerichten, dunklere/kräftigere Töne wie black/azure
+zu eher blassen, hellen Gerichten), damit das Essen auf dem Foto nicht mit
+dem Teller verschwimmt. Falls das Bildgenerierungs-Tool ein Seitenverhältnis
+einstellen lässt, empfiehl **4:3 (landschaft)** oder **1:1** — beides liegt
+näher an den Zielrahmen der App (Karte ca. 1.4:1, Hero-Bild ca. 1.4:1) als
+ein sehr breites Kinoformat und braucht dadurch weniger Zuschnitt. Sobald
+der Nutzer ein fertiges Bild hat, sieh Schritt 1 „Foto (optional)" oben, um
+es einzubinden.
 
 ## 7. Prüfen
 
