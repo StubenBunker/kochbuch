@@ -105,7 +105,30 @@ Muster der bestehenden Einträge. `id` ist ein eindeutiger kebab-case-Slug (z. B
 `schoko-bananenbrot`) — kurz, aus dem Titel abgeleitet, kollidiert mit keiner
 bestehenden `id`.
 
-## 6. Prüfen
+## 6. Bild-Prompt ausgeben
+
+Es gibt noch keine Food-Fotografie-KI-Anbindung — stattdessen bekommt der Nutzer
+nach jedem hinzugefügten Rezept einen fertigen Prompt zum Selbst-Einfügen in ein
+Bildgenerierungs-Tool (z. B. ChatGPT/GPT Image, Midjourney, Gemini). Gib ihn **immer**
+aus, direkt im Chat, mit dem Rezept ausgefüllt:
+
+```
+Professional food photography of [GERICHT], plated on a Motel a Miio "Areia"
+large plate in pink — handmade stoneware with a glossy, mottled pink-to-terracotta
+reactive glaze radiating from the rim, cream-white base. Visible ingredients:
+[ZUTATENLISTE, kommagetrennt]. Shot from a 45-degree angle, soft natural window
+light from the left, shallow depth of field, warm earthy color palette (cream,
+terracotta, olive green), linen napkin and wooden table in background, minimal
+styling, no text, no watermark, no hands, appetizing and slightly rustic
+aesthetic, shot on a 50mm lens, high detail, editorial food magazine style.
+```
+
+`[GERICHT]` ist der Rezepttitel auf Englisch beschrieben, `[ZUTATENLISTE]` die
+Haupt-Zutaten (nicht jede Kleinigkeit wie Salz/Gewürze, sondern die visuell
+erkennbaren) auf Englisch, kommagetrennt. Sobald der Nutzer ein fertiges Bild hat,
+sieh Schritt 1 „Foto (optional)" oben, um es einzubinden.
+
+## 7. Prüfen
 
 Nach dem Editieren:
 
@@ -117,7 +140,7 @@ Das fängt so gut wie jeden Fehler ab, den man beim Abtippen macht — falsche
 Kategorie, vergessenes Feld, Tippfehler in einem Union-Typ. Bei Fehlern die
 betroffene Zeile fixen und erneut prüfen, bevor du fertig meldest.
 
-## 7. Veröffentlichen
+## 8. Veröffentlichen
 
 Ein `git push` auf `main` im Repo `StubenBunker/kochbuch` löst automatisch ein
 Deployment über GitHub Actions aus (siehe `.github/workflows/deploy.yml`) — die
