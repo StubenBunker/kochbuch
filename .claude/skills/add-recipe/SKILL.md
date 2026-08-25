@@ -114,8 +114,11 @@ aus, direkt im Chat, mit dem Rezept ausgefüllt:
 
 ```
 Professional food photography of [GERICHT], plated on a Motel a Miio "Areia"
-large plate in [TELLERFARBE] — handmade stoneware with a glossy, mottled
-reactive glaze radiating from the rim, cream-white base. Visible ingredients:
+large plate in [TELLERFARBE] — a simple round classic dinner plate (not
+scalloped, not organic/wavy-edged, not a bowl), 29 cm, flat wide rim, glossy
+handmade stoneware with a mottled reactive glaze concentrated at the rim and
+fading lighter toward the center, cream-white unglazed footring visible on
+the underside. Visible ingredients:
 [ZUTATENLISTE, kommagetrennt]. Shot from a 45-degree angle, soft natural window
 light from the left, shallow depth of field. Composition: the plate centered
 exactly in the middle of the frame, occupying no more than half of the frame
@@ -140,9 +143,20 @@ zu eher blassen, hellen Gerichten), damit das Essen auf dem Foto nicht mit
 dem Teller verschwimmt. Falls das Bildgenerierungs-Tool ein Seitenverhältnis
 einstellen lässt, empfiehl **4:3 (landschaft)** oder **1:1** — beides liegt
 näher an den Zielrahmen der App (Karte ca. 1.4:1, Hero-Bild ca. 1.4:1) als
-ein sehr breites Kinoformat und braucht dadurch weniger Zuschnitt. Sobald
-der Nutzer ein fertiges Bild hat, sieh Schritt 1 „Foto (optional)" oben, um
-es einzubinden.
+ein sehr breites Kinoformat und braucht dadurch weniger Zuschnitt.
+
+**Tellerform driftet trotz Beschreibung?** Textbeschreibungen der Form sind
+für Bild-KIs unzuverlässig — verlässlicher ist ein Referenzbild. Falls das
+Tool das Hochladen eines Bildes erlaubt (ChatGPT/GPT Image und Gemini
+können das direkt im Chat, Midjourney über `--iw`), empfiehl dem Nutzer,
+zusätzlich zum Prompt ein Foto des tatsächlichen Tellers mitzuschicken
+(z. B. von https://www.motelamiio.com/products/areia-teller-gross-pink
+oder ein eigenes Foto) mit dem Zusatz „use this exact plate shape and
+material, only change the color to [TELLERFARBE] and the food on top".
+Das hält die Form über mehrere Rezepte hinweg konsistent.
+
+Sobald der Nutzer ein fertiges Bild hat, sieh Schritt 1 „Foto (optional)"
+oben, um es einzubinden.
 
 ## 7. Prüfen
 
