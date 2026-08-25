@@ -117,12 +117,14 @@ Professional food photography of [GERICHT], plated on a Motel a Miio "Areia"
 large plate in pink — handmade stoneware with a glossy, mottled pink-to-terracotta
 reactive glaze radiating from the rim, cream-white base. Visible ingredients:
 [ZUTATENLISTE, kommagetrennt]. Shot from a 45-degree angle, soft natural window
-light from the left, shallow depth of field. Background: plain, seamless,
-neutral matte off-white surface, completely empty and softly out of focus —
-no props, no napkin, no cutlery, no table texture, no other objects, nothing
-in frame besides the plate itself, so the food is the sole focus. Minimal
-styling, no text, no watermark, no hands, clean and appetizing aesthetic,
-shot on a 50mm lens, high detail, editorial food magazine style.
+light from the left, shallow depth of field. Composition: the plate centered
+exactly in the middle of the frame, with even, symmetric empty space around
+it on all sides — not off to one side. Background: plain, seamless, neutral
+matte off-white surface, completely empty and softly out of focus — no props,
+no napkin, no cutlery, no table texture, no other objects, nothing in frame
+besides the plate itself, so the food is the sole focus. Minimal styling, no
+text, no watermark, no hands, clean and appetizing aesthetic, shot on a 50mm
+lens, high detail, editorial food magazine style.
 ```
 
 `[GERICHT]` ist der Rezepttitel auf Englisch beschrieben, `[ZUTATENLISTE]` die
