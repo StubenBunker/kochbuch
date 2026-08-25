@@ -38,6 +38,10 @@ Frag nach, was fehlt, statt zu raten. Für ein vollständiges Rezept brauchst du
   Rezepte brauchen das nicht — nicht erfinden, nur setzen wenn der Nutzer eine
   echte Alternative nennt oder explizit danach fragt.
 
+Bevor irgendetwas in `recipes.ts` geschrieben wird: **immer** Schritt 5 „Entwurf
+zur Prüfung zeigen" durchlaufen — Noah hat manchmal Änderungswünsche, das Rezept
+wird nicht blind übernommen.
+
 Wenn der Nutzer ein Rezept einfach als Fließtext einfügt (z. B. aus einer Kochseite
 kopiert), extrahiere daraus die Felder selbst und bestätige kurz die Zusammenfassung,
 statt jede Zutat einzeln nachzufragen.
@@ -67,6 +71,17 @@ Das ist der Teil mit den meisten unsichtbaren Fallstricken:
     für genau diese sieben — nutze sie, das ist der bestehende Stil.
 - **`unit`** ist ein freier String, aber halte dich an die im Projekt schon verwendeten
   Einheiten für Konsistenz: `g`, `ml`, `Stk`, `TL`, `EL`, `Zehe`.
+- **`group` (optional)** — hat die Quelle das Rezept in Abschnitte unterteilt (z. B.
+  "Für die Soße" / "Für die Nudeln" / "Zum Servieren", oder "Für den Teig" /
+  "Für die Füllung"), diese Aufteilung als `group: '...'`-String pro Zutat
+  übernehmen, nicht alles in einen flachen Topf werfen. Die Detail-Ansicht zeigt
+  jede `group` als eigene Zwischenüberschrift (siehe `app/recipe/[id].tsx`).
+  Taucht eine Zutat wortgleich in mehreren Abschnitten auf (z. B. Sahne sowohl in
+  der Soße als auch in der Béchamel), als zwei separate Einträge mit
+  unterschiedlicher `group` eintragen, nicht zusammenrechnen — die Einkaufsliste
+  summiert Zutaten ohnehin automatisch über den Namen (siehe `src/utils/shopping.ts`).
+  War das Original-Rezept eine flache Liste ohne Abschnitte, `group` einfach
+  weglassen — nicht künstlich unterteilen, wo keine Unterteilung war.
 
 ## 3. Tint-Farbe wählen
 
@@ -98,14 +113,24 @@ nicht einfach hinten dran:
 1. `RecipeCategory`-Union in `src/data/types.ts`
 2. `RECIPE_CATEGORIES`-Array in `src/data/recipes.ts`
 
-## 5. Ins Array eintragen
+## 5. Entwurf zur Prüfung zeigen
+
+**Bevor irgendetwas in `recipes.ts` geschrieben wird**, den fertigen Entwurf
+kompakt und lesbar im Chat zeigen — Titel, Kategorien, Minuten, Beschreibung,
+Zutaten (gruppiert, mit Mengen pro Portion), Zubereitungsschritte, Alternativen
+falls vorhanden. Keine rohe TypeScript-Syntax abkippen, sondern so aufbereitet,
+dass Noah es in ein paar Sekunden überfliegen kann. Explizit nach Okay fragen
+oder auf Änderungswünsche warten (Noah passt öfter mal Mengen, Zutaten oder
+Formulierungen an) — erst nach Bestätigung mit Schritt 6 weitermachen.
+
+## 6. Ins Array eintragen
 
 Häng ein neues Objekt an das `recipes`-Array in `src/data/recipes.ts` an, nach dem
 Muster der bestehenden Einträge. `id` ist ein eindeutiger kebab-case-Slug (z. B.
 `schoko-bananenbrot`) — kurz, aus dem Titel abgeleitet, kollidiert mit keiner
 bestehenden `id`.
 
-## 6. Bild-Prompt ausgeben
+## 7. Bild-Prompt ausgeben
 
 Es gibt noch keine Food-Fotografie-KI-Anbindung — stattdessen bekommt der Nutzer
 nach jedem hinzugefügten Rezept einen fertigen Prompt zum Selbst-Einfügen in ein
@@ -158,7 +183,7 @@ Das hält die Form über mehrere Rezepte hinweg konsistent.
 Sobald der Nutzer ein fertiges Bild hat, sieh Schritt 1 „Foto (optional)"
 oben, um es einzubinden.
 
-## 7. Prüfen
+## 8. Prüfen
 
 Nach dem Editieren:
 
@@ -170,7 +195,7 @@ Das fängt so gut wie jeden Fehler ab, den man beim Abtippen macht — falsche
 Kategorie, vergessenes Feld, Tippfehler in einem Union-Typ. Bei Fehlern die
 betroffene Zeile fixen und erneut prüfen, bevor du fertig meldest.
 
-## 8. Veröffentlichen
+## 9. Veröffentlichen
 
 Ein `git push` auf `main` im Repo `StubenBunker/kochbuch` löst automatisch ein
 Deployment über GitHub Actions aus (siehe `.github/workflows/deploy.yml`) — die

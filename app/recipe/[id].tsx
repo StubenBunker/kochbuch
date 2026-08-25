@@ -87,17 +87,30 @@ export default function RecipeDetailScreen() {
 
           <Text style={styles.sectionHeading}>Zutaten</Text>
           <View>
-            {recipe.ingredients.map((ing, index) => (
-              <View
-                key={`${ing.name}-${ing.unit}`}
-                style={[styles.ingredientRow, index > 0 && styles.ingredientBorder]}
-              >
-                <Text style={styles.ingredientName}>{ing.name}</Text>
-                <Text style={styles.ingredientAmount}>
-                  {formatAmount(ing.amount * portions)} {ing.unit}
-                </Text>
-              </View>
-            ))}
+            {recipe.ingredients.map((ing, index) => {
+              const prevGroup = index > 0 ? recipe.ingredients[index - 1].group : undefined;
+              const showGroupLabel = ing.group && ing.group !== prevGroup;
+              return (
+                <View key={`${index}-${ing.name}-${ing.unit}`}>
+                  {showGroupLabel && (
+                    <Text style={[styles.groupLabel, index > 0 && styles.groupLabelSpacing]}>
+                      {ing.group}
+                    </Text>
+                  )}
+                  <View
+                    style={[
+                      styles.ingredientRow,
+                      index > 0 && !showGroupLabel && styles.ingredientBorder,
+                    ]}
+                  >
+                    <Text style={styles.ingredientName}>{ing.name}</Text>
+                    <Text style={styles.ingredientAmount}>
+                      {formatAmount(ing.amount * portions)} {ing.unit}
+                    </Text>
+                  </View>
+                </View>
+              );
+            })}
           </View>
 
           {recipe.alternatives && (
@@ -202,6 +215,17 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     color: colors.meta,
     marginBottom: 4,
+  },
+  groupLabel: {
+    fontFamily: fonts.monoMedium,
+    fontSize: 11.5,
+    color: colors.terracotta,
+    paddingTop: 12,
+    paddingBottom: 2,
+  },
+  groupLabelSpacing: {
+    borderTopWidth: 1,
+    borderTopColor: colors.hairline,
   },
   ingredientRow: {
     flexDirection: 'row',

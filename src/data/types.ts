@@ -26,6 +26,7 @@ export type Ingredient = {
   amount: number; // per portion, scaled by portion count
   unit: string;
   category: ShoppingCategory;
+  group?: string; // optional sub-heading, e.g. "Für die Soße" vs "Für die Nudeln"
 };
 
 export type Recipe = {
