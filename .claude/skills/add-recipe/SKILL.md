@@ -118,19 +118,25 @@ large plate in pink — handmade stoneware with a glossy, mottled pink-to-terrac
 reactive glaze radiating from the rim, cream-white base. Visible ingredients:
 [ZUTATENLISTE, kommagetrennt]. Shot from a 45-degree angle, soft natural window
 light from the left, shallow depth of field. Composition: the plate centered
-exactly in the middle of the frame, with even, symmetric empty space around
-it on all sides — not off to one side. Background: plain, seamless, neutral
-matte off-white surface, completely empty and softly out of focus — no props,
-no napkin, no cutlery, no table texture, no other objects, nothing in frame
-besides the plate itself, so the food is the sole focus. Minimal styling, no
-text, no watermark, no hands, clean and appetizing aesthetic, shot on a 50mm
-lens, high detail, editorial food magazine style.
+exactly in the middle of the frame, occupying no more than half of the frame
+width, with generous, even empty space on all four sides — the plate must
+stay well clear of every edge, since the app crops this image tighter on
+some screens. Background: plain, seamless, neutral matte off-white surface,
+completely empty and softly out of focus — no props, no napkin, no cutlery,
+no table texture, no other objects, nothing in frame besides the plate
+itself, so the food is the sole focus. Minimal styling, no text, no
+watermark, no hands, clean and appetizing aesthetic, shot on a 50mm lens,
+high detail, editorial food magazine style.
 ```
 
 `[GERICHT]` ist der Rezepttitel auf Englisch beschrieben, `[ZUTATENLISTE]` die
 Haupt-Zutaten (nicht jede Kleinigkeit wie Salz/Gewürze, sondern die visuell
-erkennbaren) auf Englisch, kommagetrennt. Sobald der Nutzer ein fertiges Bild hat,
-sieh Schritt 1 „Foto (optional)" oben, um es einzubinden.
+erkennbaren) auf Englisch, kommagetrennt. Falls das Bildgenerierungs-Tool ein
+Seitenverhältnis einstellen lässt, empfiehl **4:3 (landschaft)** oder **1:1**
+— beides liegt näher an den Zielrahmen der App (Karte ca. 1.4:1, Hero-Bild ca.
+1.4:1) als ein sehr breites Kinoformat und braucht dadurch weniger Zuschnitt.
+Sobald der Nutzer ein fertiges Bild hat, sieh Schritt 1 „Foto (optional)"
+oben, um es einzubinden.
 
 ## 7. Prüfen
 
