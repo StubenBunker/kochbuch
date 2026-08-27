@@ -159,6 +159,25 @@ export const recipes: Recipe[] = [
     ],
     alternatives: 'Statt/zusätzlich zur Paprika passen auch Auberginen oder Zucchini gut.',
   },
+  {
+    id: 'apfelkompott',
+    title: 'Apfelkompott',
+    categories: ['Backwaren & Dessert', 'Schnell'],
+    minutes: 20,
+    tint: '#E2B98F',
+    description: 'Schnelles Apfelkompott mit Zimt und Zitrone — nur vier Zutaten, in 20 Minuten fertig.',
+    ingredients: [
+      { name: 'Äpfel (z. B. Boskopp)', amount: 2, unit: 'Stk', category: G },
+      { name: 'Zucker', amount: 0.5, unit: 'EL', category: T },
+      { name: 'Zitronensaft', amount: 0.5, unit: 'EL', category: S },
+      { name: 'Zimtstange', amount: 0.5, unit: 'Stk', category: W },
+    ],
+    steps: [
+      'Äpfel schälen, entkernen und in Stücke schneiden — so groß, wie sie später im Kompott sein sollen.',
+      'Mit Wasser, Zimtstange, Zucker und Zitronensaft in einen Topf geben, bei mittlerer Hitze mit geschlossenem Deckel 15–20 Minuten köcheln, bis die Apfelstücke zerfallen.',
+      'Zimtstange entfernen, etwas abkühlen lassen und direkt genießen oder im Kühlschrank ein paar Tage aufbewahren.',
+    ],
+  },
 ];
 
 export function findRecipe(id: string): Recipe | undefined {
