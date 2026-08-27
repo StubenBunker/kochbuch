@@ -134,6 +134,7 @@ export const recipes: Recipe[] = [
     categories: ['Italienisch', 'Pasta'],
     minutes: 55,
     tint: '#C97B5A',
+    photo: require('../../assets/recipes/pesto-auflauf.jpg'),
     description:
       'One-Pot-Nudelauflauf mit Pesto Rosso, Paprika und Kirschtomaten — ungekocht in den Ofen, ganz ohne Vorkochen.',
     ingredients: [
