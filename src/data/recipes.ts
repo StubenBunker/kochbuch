@@ -128,6 +128,36 @@ export const recipes: Recipe[] = [
     ],
     alternatives: 'Statt schwarzem Reisessig geht auch Balsamico, bei der Sojasauce reicht eine Sorte.',
   },
+  {
+    id: 'pesto-auflauf',
+    title: 'Veganer One-Pot-Pesto-Nudelauflauf',
+    categories: ['Italienisch', 'Pasta'],
+    minutes: 55,
+    tint: '#C97B5A',
+    description:
+      'One-Pot-Nudelauflauf mit Pesto Rosso, Paprika und Kirschtomaten — ungekocht in den Ofen, ganz ohne Vorkochen.',
+    ingredients: [
+      { name: 'Zwiebel', amount: 0.2, unit: 'Stk', category: G },
+      { name: 'Knoblauch', amount: 0.4, unit: 'Zehe', category: G },
+      { name: 'Gegrillte Paprika (Glas)', amount: 30, unit: 'g', category: C },
+      { name: 'Kirschtomaten', amount: 50, unit: 'g', category: G },
+      { name: 'Blattspinat', amount: 20, unit: 'g', category: G },
+      { name: 'Rigatoni', amount: 100, unit: 'g', category: T },
+      { name: 'Getrocknete Kräuter (italienisch)', amount: 0.2, unit: 'EL', category: W },
+      { name: 'Chiliflocken', amount: 0.2, unit: 'TL', category: W },
+      { name: 'Sonnenblumenkerne', amount: 20, unit: 'g', category: T },
+      { name: 'Veganes Pesto Rosso', amount: 52, unit: 'g', category: S },
+      { name: 'Basilikum frisch', amount: 3, unit: 'g', category: G },
+    ],
+    steps: [
+      'Ofen auf 180 °C (Umluft) vorheizen. Zwiebel und Knoblauch fein würfeln, Paprika abtropfen lassen und klein schneiden, Kirschtomaten halbieren, Spinat putzen und klein schneiden.',
+      'Ungekochte Rigatoni, Zwiebel, Knoblauch, Paprika, Kirschtomaten, Spinat, Kräuter, Chiliflocken, Sonnenblumenkerne, Salz und Pfeffer in eine Auflaufform geben.',
+      'Pesto dazugeben, alles gründlich vermengen, dann Wasser angießen, ohne die Nudeln komplett zu bedecken.',
+      'Bei 180 °C (Umluft) ca. 30 Minuten backen, bis die Nudeln al dente sind.',
+      'Mit frischem Basilikum bestreut servieren.',
+    ],
+    alternatives: 'Statt/zusätzlich zur Paprika passen auch Auberginen oder Zucchini gut.',
+  },
 ];
 
 export function findRecipe(id: string): Recipe | undefined {
