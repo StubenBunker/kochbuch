@@ -165,6 +165,7 @@ export const recipes: Recipe[] = [
     categories: ['Backwaren & Dessert', 'Schnell'],
     minutes: 20,
     tint: '#E2B98F',
+    photo: require('../../assets/recipes/apfelkompott.jpg'),
     description: 'Schnelles Apfelkompott mit Zimt und Zitrone — nur vier Zutaten, in 20 Minuten fertig.',
     ingredients: [
       { name: 'Äpfel (z. B. Boskopp)', amount: 2, unit: 'Stk', category: G },
@@ -184,6 +185,7 @@ export const recipes: Recipe[] = [
     categories: ['Backwaren & Dessert'],
     minutes: 80,
     tint: '#EFD9A8',
+    photo: require('../../assets/recipes/mandarinen-kaesekuchen.jpg'),
     description:
       'Cremiger veganer Käsekuchen mit Mandarinen und Streuseln für eine 20-cm-Springform (12 Stück) — braucht eine Nacht Kühlzeit.',
     fixedYield: { label: '20-cm-Springform, 12 Stück' },
