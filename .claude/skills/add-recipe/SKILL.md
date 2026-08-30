@@ -22,7 +22,20 @@ Frag nach, was fehlt, statt zu raten. Für ein vollständiges Rezept brauchst du
   mehrere, wenn es wirklich passt — aber nicht künstlich aufblähen, nur setzen was
   tatsächlich zutrifft. Passt keine wirklich, sieh Schritt 4.
 - **Minuten** (Gesamtzeit, als Zahl)
-- **Beschreibung** — ein kurzer, appetitanregender Satz auf Deutsch
+- **Portionierung: skalierbar oder fixe Menge?** — die meisten Rezepte skalieren mit
+  der Portionenzahl (Curry, Pasta, Suppe …). Kuchen, Aufläufe mit fester Springform
+  und ähnliches Gebäck aber nicht — man backt keine "0,3 Kuchen", sondern immer die
+  ganze Form. Für solche Rezepte `fixedYield: { label: '20-cm-Springform, 12 Stück' }`
+  setzen (siehe `src/data/types.ts`) — dann zeigt die App die echten Originalmengen
+  statt kaputter Bruchteile, ersetzt den Portionen-Stepper durch die feste Angabe,
+  und die Einkaufsliste zählt das Rezept genau einmal statt mit der Portionenzahl zu
+  multiplizieren. Faustregel: braucht das Original eine bestimmte Formgröße
+  (Springform, Kastenform, Auflaufform in fester Größe) → `fixedYield`. Skaliert das
+  Gericht dagegen einfach mit mehr Zutaten in derselben Pfanne/demselben Topf → normal
+  mit `amount` pro Portion arbeiten.
+- **Beschreibung** — ein kurzer, appetitanregender Satz auf Deutsch. Bei `fixedYield`-
+  Rezepten die Form/Größe hier prominent nennen (z. B. "... für eine 20-cm-Springform
+  (12 Stück)"), nicht nur im `fixedYield.label` verstecken.
 - **Zutaten** — jede mit `name`, `amount`, `unit`, `category`. Sieh Abschnitt
   "Zutaten korrekt erfassen" unten, das ist der Teil, bei dem am ehesten was schiefgeht.
 - **Zubereitungsschritte** — kurze, direkte Imperativsätze auf Deutsch ("Zwiebel fein
@@ -50,10 +63,13 @@ statt jede Zutat einzeln nachzufragen.
 
 Das ist der Teil mit den meisten unsichtbaren Fallstricken:
 
-- **`amount` ist immer PRO PORTION.** Die App skaliert live mit der Portionenzahl
-  (siehe `src/utils/shopping.ts` und `app/recipe/[id].tsx`). Wenn ein Rezept "für 2
-  Portionen: 200g Reis" angibt, trägst du `amount: 100` ein (200 ÷ 2), nicht 200.
-  Frag im Zweifel nach, für wie viele Portionen die Original-Mengenangabe gilt.
+- **`amount` ist immer PRO PORTION — außer bei `fixedYield`-Rezepten.** Die App
+  skaliert live mit der Portionenzahl (siehe `src/utils/shopping.ts` und
+  `app/recipe/[id].tsx`). Wenn ein Rezept "für 2 Portionen: 200g Reis" angibt,
+  trägst du `amount: 100` ein (200 ÷ 2), nicht 200. Frag im Zweifel nach, für wie
+  viele Portionen die Original-Mengenangabe gilt. Bei `fixedYield`-Rezepten (siehe
+  Schritt 1) gilt das NICHT — dort trägst du die echten Originalmengen 1:1 ein
+  (z. B. `amount: 200` für "200g Mehl"), nicht durch die Stückzahl geteilt.
 - **`category` ist eine von genau sieben Einkaufslisten-Kategorien**, keine freie
   Beschreibung: `Obst & Gemüse`, `Konserven`, `Trockenwaren`, `Tiefkühl`, `Gewürze`,
   `Drogerie`, `Sonstiges`. Diese Kategorie steuert die Gruppierung auf dem
