@@ -224,6 +224,51 @@ export const recipes: Recipe[] = [
     alternatives:
       'Für mehr Stücke lieber eine größere Springform (Ø 24–26 cm) nehmen und alle Zutaten proportional erhöhen, statt zwei Kuchen zu backen.',
   },
+  {
+    id: 'chili-sin-carne',
+    title: 'Veganes Chili sin Carne mit Reis',
+    categories: ['Mexikanisch', 'Suppen & Eintopf'],
+    minutes: 40,
+    tint: '#A85A3E',
+    description:
+      'Herzhaftes Chili sin Carne mit Kidneybohnen, Mais und Reis — würzig, sättigend, in 40 Minuten fertig.',
+    ingredients: [
+      { name: 'Knoblauch', amount: 0.6, unit: 'Zehe', category: G, group: 'Für das Chili' },
+      { name: 'Zwiebel', amount: 0.5, unit: 'Stk', category: G, group: 'Für das Chili' },
+      { name: 'Möhre', amount: 0.4, unit: 'Stk', category: G, group: 'Für das Chili' },
+      { name: 'Veggie Hack (dm)', amount: 30, unit: 'g', category: S, group: 'Für das Chili' },
+      { name: 'Gemüsebrühe', amount: 100, unit: 'ml', category: S, group: 'Für das Chili' },
+      { name: 'Öl', amount: 0.6, unit: 'EL', category: S, group: 'Für das Chili' },
+      { name: 'Chilischote', amount: 0.25, unit: 'Stk', category: G, group: 'Für das Chili' },
+      { name: 'Paprikapulver edelsüß', amount: 0.4, unit: 'TL', category: W, group: 'Für das Chili' },
+      { name: 'Kakaopulver', amount: 0.5, unit: 'TL', category: T, group: 'Für das Chili' },
+      { name: 'Tomatenmark', amount: 12.5, unit: 'g', category: S, group: 'Für das Chili' },
+      { name: 'Gehackte Tomaten (Dose)', amount: 100, unit: 'g', category: C, group: 'Für das Chili' },
+      { name: 'Passierte Tomaten (Dose)', amount: 50, unit: 'g', category: S, group: 'Für das Chili' },
+      {
+        name: 'Kidneybohnen (Dose, abgetropft)',
+        amount: 64,
+        unit: 'g',
+        category: C,
+        group: 'Für das Chili',
+      },
+      { name: 'Mais (Dose, abgetropft)', amount: 69, unit: 'g', category: C, group: 'Für das Chili' },
+      { name: 'Reis', amount: 70, unit: 'g', category: T, group: 'Zum Servieren' },
+      { name: 'Chiliflocken', amount: 0.25, unit: 'TL', category: W, group: 'Toppings' },
+      { name: 'Sesam', amount: 0.5, unit: 'TL', category: T, group: 'Toppings' },
+      { name: 'Petersilie frisch', amount: 3, unit: 'g', category: G, group: 'Toppings' },
+      { name: 'Limette', amount: 0.25, unit: 'Stk', category: G, group: 'Toppings' },
+    ],
+    steps: [
+      'Knoblauch schälen und fein hacken, Zwiebeln und Möhren würfeln.',
+      'Heiße Brühe über das Veggie Hack gießen, 5 Minuten einweichen lassen, dann gut abtropfen lassen.',
+      'Öl in einer Pfanne erhitzen, Zwiebeln, Möhren und Veggie Hack darin ca. 5 Minuten anbraten. Knoblauch, Chili, Paprikapulver, Kakaopulver und Tomatenmark zugeben, kurz mitrösten.',
+      'Tomaten, restliche Brühe, Kidneybohnen, Mais, Salz und Pfeffer zugeben. Bei niedriger Hitze 20–25 Minuten köcheln lassen. Parallel Reis nach Packungsanleitung kochen.',
+      'Abschmecken und bei Bedarf nachwürzen.',
+      'Chili auf dem Reis anrichten, mit Chiliflocken, Sesam, Petersilie und Limette toppen.',
+    ],
+    alternatives: 'Statt dm Veggie Hack geht auch Sojagranulat oder 250 g Tofu.',
+  },
 ];
 
 export function findRecipe(id: string): Recipe | undefined {
