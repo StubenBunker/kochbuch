@@ -230,6 +230,7 @@ export const recipes: Recipe[] = [
     categories: ['Mexikanisch', 'Suppen & Eintopf'],
     minutes: 40,
     tint: '#A85A3E',
+    photo: require('../../assets/recipes/chili-sin-carne.jpg'),
     description:
       'Herzhaftes Chili sin Carne mit Kidneybohnen, Mais und Reis — würzig, sättigend, in 40 Minuten fertig.',
     ingredients: [
