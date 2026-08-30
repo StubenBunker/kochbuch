@@ -40,6 +40,12 @@ export type Recipe = {
   ingredients: Ingredient[];
   steps: string[];
   alternatives?: string; // optional substitution tip, e.g. "Statt Tofu geht auch Seitan"
+  // For recipes that don't scale with a portion count (mainly baked goods: a cake
+  // is baked as one whole in one pan, not "N portions"). When set, `ingredients`
+  // hold the recipe's real, absolute amounts (not per-portion), the portion
+  // stepper is replaced by this label, and the shopping list adds the recipe
+  // exactly once regardless of how many "portions" are planned.
+  fixedYield?: { label: string };
 };
 
 export type CustomUnit = 'Stk' | 'g' | 'ml';

@@ -7,7 +7,7 @@ import { Header } from '../src/components/Header';
 import { EmptyState } from '../src/components/EmptyState';
 import { PortionStepper } from '../src/components/PortionStepper';
 import { RecipePhoto } from '../src/components/RecipePhoto';
-import { colors, radii } from '../src/theme/tokens';
+import { colors, fonts, radii } from '../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
 
 export default function WocheScreen() {
@@ -24,7 +24,10 @@ export default function WocheScreen() {
     [plan],
   );
 
-  const totalPortions = planRecipes.reduce((sum, r) => sum + portionFor(r.id), 0);
+  const totalPortions = planRecipes.reduce(
+    (sum, r) => sum + (r.fixedYield ? 0 : portionFor(r.id)),
+    0,
+  );
 
   return (
     <View style={styles.screen}>
@@ -51,12 +54,16 @@ export default function WocheScreen() {
                   <Text style={styles.rowTitle} numberOfLines={2}>
                     {recipe.title}
                   </Text>
-                  <PortionStepper
-                    variant="plan"
-                    value={portionFor(recipe.id)}
-                    onDecrease={() => setPortion(recipe.id, -1)}
-                    onIncrease={() => setPortion(recipe.id, 1)}
-                  />
+                  {recipe.fixedYield ? (
+                    <Text style={styles.fixedYieldLabel}>{recipe.fixedYield.label}</Text>
+                  ) : (
+                    <PortionStepper
+                      variant="plan"
+                      value={portionFor(recipe.id)}
+                      onDecrease={() => setPortion(recipe.id, -1)}
+                      onIncrease={() => setPortion(recipe.id, 1)}
+                    />
+                  )}
                 </View>
                 <Pressable
                   hitSlop={12}
@@ -128,5 +135,10 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 6,
+  },
+  fixedYieldLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 11.5,
+    color: colors.inkMuted,
   },
 });

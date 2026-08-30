@@ -178,6 +178,50 @@ export const recipes: Recipe[] = [
       'Zimtstange entfernen, etwas abkühlen lassen und direkt genießen oder im Kühlschrank ein paar Tage aufbewahren.',
     ],
   },
+  {
+    id: 'mandarinen-kaesekuchen',
+    title: 'Mandarinen-Käsekuchen mit Streuseln',
+    categories: ['Backwaren & Dessert'],
+    minutes: 80,
+    tint: '#EFD9A8',
+    description:
+      'Cremiger veganer Käsekuchen mit Mandarinen und Streuseln für eine 20-cm-Springform (12 Stück) — braucht eine Nacht Kühlzeit.',
+    fixedYield: { label: '20-cm-Springform, 12 Stück' },
+    ingredients: [
+      { name: 'Mehl (Weizen oder Dinkel)', amount: 200, unit: 'g', category: T, group: 'Für den Boden' },
+      { name: 'Backpulver', amount: 1, unit: 'TL', category: T, group: 'Für den Boden' },
+      { name: 'Salz', amount: 0.33, unit: 'TL', category: W, group: 'Für den Boden' },
+      { name: 'Zucker', amount: 75, unit: 'g', category: T, group: 'Für den Boden' },
+      { name: 'Kalte vegane Butter', amount: 100, unit: 'g', category: S, group: 'Für den Boden' },
+      { name: 'Kalte Pflanzenmilch', amount: 2, unit: 'EL', category: S, group: 'Für den Boden' },
+      { name: 'Veganer Quark', amount: 500, unit: 'g', category: S, group: 'Für die Füllung' },
+      { name: 'Kokosmilch oder Sojasahne', amount: 120, unit: 'ml', category: S, group: 'Für die Füllung' },
+      { name: 'Geschmolzene vegane Butter', amount: 80, unit: 'ml', category: S, group: 'Für die Füllung' },
+      { name: 'Vanillepuddingpulver', amount: 1, unit: 'Stk', category: S, group: 'Für die Füllung' },
+      { name: 'Zucker', amount: 100, unit: 'g', category: T, group: 'Für die Füllung' },
+      {
+        name: 'Mandarinen aus der Dose (abgetropft)',
+        amount: 350,
+        unit: 'g',
+        category: C,
+        group: 'Für die Füllung',
+      },
+      { name: 'Mehl (Weizen oder Dinkel)', amount: 50, unit: 'g', category: T, group: 'Für die Streusel' },
+      { name: 'Zucker', amount: 2, unit: 'EL', category: T, group: 'Für die Streusel' },
+      { name: 'Kalte vegane Butter', amount: 25, unit: 'g', category: S, group: 'Für die Streusel' },
+    ],
+    steps: [
+      'Ofen auf 180 °C vorheizen. Springformrand einfetten, Boden mit Backpapier auslegen, Form kurz in den Gefrierschrank stellen.',
+      'Für den Boden Mehl, Backpulver, Salz und Zucker vermengen. Kalte Butter und Pflanzenmilch zugeben, zügig zu einem Teig verkneten.',
+      'Teig auf Backpapier ausrollen, in die Form heben, gleichmäßig am Boden und Rand andrücken. Boden mit einer Gabel einstechen, leicht mit Mehl bestäuben.',
+      'Für die Füllung Quark, Kokosmilch, geschmolzene Butter, Puddingpulver und Zucker glatt verrühren. Mandarinen gründlich abtropfen lassen.',
+      'Die Hälfte der Mandarinen auf dem Boden verteilen, die Käsekuchenmasse gleichmäßig darauf streichen, restliche Mandarinen obenauf verteilen.',
+      'Für die Streusel Mehl, Zucker und kalte Butterwürfel zu Streuseln verkneten, über dem Kuchen verteilen.',
+      'Ca. 60 Minuten backen, bis die Füllung gestockt ist. Auf Zimmertemperatur abkühlen lassen, dann über Nacht im Kühlschrank fest werden lassen.',
+    ],
+    alternatives:
+      'Für mehr Stücke lieber eine größere Springform (Ø 24–26 cm) nehmen und alle Zutaten proportional erhöhen, statt zwei Kuchen zu backen.',
+  },
 ];
 
 export function findRecipe(id: string): Recipe | undefined {

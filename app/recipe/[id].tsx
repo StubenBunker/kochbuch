@@ -31,6 +31,7 @@ export default function RecipeDetailScreen() {
 
   const inWeek = plan.includes(recipe.id);
   const isFav = !!favs[recipe.id];
+  const scale = recipe.fixedYield ? 1 : portions;
 
   return (
     <View style={styles.screen}>
@@ -75,15 +76,22 @@ export default function RecipeDetailScreen() {
           <Text style={styles.title}>{recipe.title}</Text>
           <Text style={styles.description}>{recipe.description}</Text>
 
-          <View style={styles.portionCard}>
-            <Text style={styles.portionLabel}>Portionen</Text>
-            <PortionStepper
-              variant="detail"
-              value={portions}
-              onDecrease={() => setPortion(recipe.id, -1)}
-              onIncrease={() => setPortion(recipe.id, 1)}
-            />
-          </View>
+          {recipe.fixedYield ? (
+            <View style={styles.portionCard}>
+              <Text style={styles.portionLabel}>Ergibt</Text>
+              <Text style={styles.fixedYieldValue}>{recipe.fixedYield.label}</Text>
+            </View>
+          ) : (
+            <View style={styles.portionCard}>
+              <Text style={styles.portionLabel}>Portionen</Text>
+              <PortionStepper
+                variant="detail"
+                value={portions}
+                onDecrease={() => setPortion(recipe.id, -1)}
+                onIncrease={() => setPortion(recipe.id, 1)}
+              />
+            </View>
+          )}
 
           <Text style={styles.sectionHeading}>Zutaten</Text>
           <View>
@@ -105,7 +113,7 @@ export default function RecipeDetailScreen() {
                   >
                     <Text style={styles.ingredientName}>{ing.name}</Text>
                     <Text style={styles.ingredientAmount}>
-                      {formatAmount(ing.amount * portions)} {ing.unit}
+                      {formatAmount(ing.amount * scale)} {ing.unit}
                     </Text>
                   </View>
                 </View>
@@ -206,6 +214,11 @@ const styles = StyleSheet.create({
     fontSize: 14.5,
     fontWeight: '600',
     color: colors.ink,
+  },
+  fixedYieldValue: {
+    fontFamily: fonts.mono,
+    fontSize: 12.5,
+    color: colors.accent,
   },
   sectionHeading: {
     marginTop: 26,

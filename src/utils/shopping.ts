@@ -25,7 +25,7 @@ export function buildShoppingList(
   for (const id of plan) {
     const recipe = findRecipe(id);
     if (!recipe) continue;
-    const count = portions[id] ?? defaultPortions;
+    const count = recipe.fixedYield ? 1 : portions[id] ?? defaultPortions;
     for (const ing of recipe.ingredients) {
       const key = `${ing.name}|${ing.unit}`;
       const existing = map.get(key);
