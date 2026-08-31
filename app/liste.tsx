@@ -9,6 +9,13 @@ import { colors, fonts, radii } from '../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
 import { buildShoppingList, mergeCustomItems } from '../src/utils/shopping';
 import { formatAmount } from '../src/utils/format';
+import {
+  filterItemSuggestions,
+  getRecipeIngredientSuggestions,
+  type ItemSuggestion,
+} from '../src/utils/suggestions';
+
+const RECIPE_INGREDIENT_SUGGESTIONS = getRecipeIngredientSuggestions();
 
 // Checked items disappear from the list a while after being ticked off, so the
 // list stays clean towards the end of a shopping trip without needing a manual
@@ -30,6 +37,7 @@ export default function ListeScreen() {
   const checked = useHousehold((s) => s.checked);
   const checkedAt = useHousehold((s) => s.checkedAt);
   const customItems = useHousehold((s) => s.customItems);
+  const knownItems = useHousehold((s) => s.knownItems);
   const toggleChecked = useHousehold((s) => s.toggleChecked);
   const addCustomItem = useHousehold((s) => s.addCustomItem);
   const removeCustomItem = useHousehold((s) => s.removeCustomItem);
@@ -38,6 +46,22 @@ export default function ListeScreen() {
   const [newItemCategory, setNewItemCategory] = useState<ShoppingCategory>('Sonstiges');
   const [newItemUnit, setNewItemUnit] = useState<CustomUnit | undefined>(undefined);
   const [newItemAmount, setNewItemAmount] = useState('1');
+  const [suggestionsDismissed, setSuggestionsDismissed] = useState(false);
+
+  const suggestions = useMemo(
+    () =>
+      suggestionsDismissed
+        ? []
+        : filterItemSuggestions(newItemText, knownItems, RECIPE_INGREDIENT_SUGGESTIONS),
+    [newItemText, knownItems, suggestionsDismissed],
+  );
+
+  function applySuggestion(suggestion: ItemSuggestion) {
+    setNewItemText(suggestion.name);
+    setNewItemCategory(suggestion.category);
+    setNewItemUnit(suggestion.unit);
+    setSuggestionsDismissed(true);
+  }
 
   // Ticks once a minute so items cross the 30-minute hide threshold live,
   // without needing a screen reload.
@@ -76,6 +100,7 @@ export default function ListeScreen() {
     setNewItemCategory('Sonstiges');
     setNewItemUnit(undefined);
     setNewItemAmount('1');
+    setSuggestionsDismissed(false);
   }
 
   return (
@@ -94,7 +119,10 @@ export default function ListeScreen() {
         <View style={styles.addRow}>
           <TextInput
             value={newItemText}
-            onChangeText={setNewItemText}
+            onChangeText={(text) => {
+              setNewItemText(text);
+              setSuggestionsDismissed(false);
+            }}
             onSubmitEditing={submitNewItem}
             placeholder="Artikel hinzufügen…"
             placeholderTextColor={colors.meta}
@@ -105,6 +133,21 @@ export default function ListeScreen() {
             <Ionicons name="add" size={20} color={colors.onAccent} />
           </Pressable>
         </View>
+
+        {suggestions.length > 0 && (
+          <View style={styles.suggestions}>
+            {suggestions.map((suggestion, index) => (
+              <Pressable
+                key={suggestion.name}
+                onPress={() => applySuggestion(suggestion)}
+                style={[styles.suggestionRow, index > 0 && styles.suggestionRowBorder]}
+              >
+                <Text style={styles.suggestionName}>{suggestion.name}</Text>
+                <Text style={styles.suggestionCategory}>{suggestion.category}</Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
 
         {newItemText.length > 0 && (
           <>
@@ -287,6 +330,35 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  suggestions: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: colors.hairlineSoft,
+    overflow: 'hidden',
+  },
+  suggestionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+    paddingVertical: 11,
+    paddingHorizontal: 14,
+  },
+  suggestionRowBorder: {
+    borderTopWidth: 1,
+    borderTopColor: colors.hairlineLight,
+  },
+  suggestionName: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.ink,
+  },
+  suggestionCategory: {
+    fontFamily: fonts.mono,
+    fontSize: 10.5,
+    color: colors.meta,
   },
   unitRow: {
     flexDirection: 'row',

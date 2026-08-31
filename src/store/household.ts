@@ -20,6 +20,12 @@ export type HouseholdState = {
   checkedAt: Record<string, number>; // ms timestamp — drives the auto-hide delay
   cart: Record<string, boolean>;
   customItems: CustomItem[];
+  // Merkt sich Kategorie/Einheit jedes je manuell hinzugefügten Artikels, auch
+  // nachdem er aus der aktuellen Liste entfernt wurde — Grundlage für die
+  // Autocomplete-Vorschläge beim Hinzufügen ("Toilettenpapier" taucht in
+  // keinem Rezept auf). Wird bei jedem addCustomItem einfach überschrieben,
+  // spiegelt also immer die zuletzt gewählte Kategorie/Einheit wider.
+  knownItems: Record<string, { category: ShoppingCategory; unit?: CustomUnit }>;
 };
 
 type Store = HouseholdState & {
@@ -53,6 +59,7 @@ function pick(s: HouseholdState): HouseholdState {
     checkedAt: s.checkedAt,
     cart: s.cart,
     customItems: s.customItems,
+    knownItems: s.knownItems,
   };
 }
 
@@ -83,6 +90,7 @@ export const useHousehold = create<Store>((set, get) => ({
   checkedAt: {},
   cart: {},
   customItems: [],
+  knownItems: {},
   hydrated: false,
   synced: false,
   portionFor: (id) => get().portions[id] ?? DEFAULT_PORTIONS,
@@ -152,8 +160,9 @@ export const useHousehold = create<Store>((set, get) => ({
         ...(unit ? { unit, amount: amount && amount > 0 ? amount : 1 } : {}),
       };
       const customItems = [...s.customItems, item];
-      schedulePersist(pick({ ...s, customItems }));
-      return { customItems };
+      const knownItems = { ...s.knownItems, [trimmed]: { category, unit } };
+      schedulePersist(pick({ ...s, customItems, knownItems }));
+      return { customItems, knownItems };
     }),
   removeCustomItem: (id) =>
     set((s) => {
@@ -197,6 +206,7 @@ export async function initHouseholdSync(): Promise<void> {
           checkedAt: data.checkedAt ?? {},
           cart: data.cart ?? {},
           customItems: data.customItems ?? [],
+          knownItems: data.knownItems ?? {},
         };
         useHousehold.setState({ ...next, synced: true });
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
