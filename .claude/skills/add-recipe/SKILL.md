@@ -32,7 +32,11 @@ Frag nach, was fehlt, statt zu raten. Für ein vollständiges Rezept brauchst du
   multiplizieren. Faustregel: braucht das Original eine bestimmte Formgröße
   (Springform, Kastenform, Auflaufform in fester Größe) → `fixedYield`. Skaliert das
   Gericht dagegen einfach mit mehr Zutaten in derselben Pfanne/demselben Topf → normal
-  mit `amount` pro Portion arbeiten.
+  mit `amount` pro Portion arbeiten. Für eine abweichende Formgröße (z. B. 23 statt
+  20 cm) gibt es in der App selbst einen freien Multiplikator neben der `fixedYield`-
+  Angabe (Detail- und Wochenplan-Ansicht, `YieldFactorInput`) — den Faktor rechnet der
+  Nutzer selbst aus (Flächenverhältnis, z. B. (23/20)² ≈ 1,32) und trägt ihn dort ein,
+  dafür muss im Rezept selbst nichts geändert werden.
 - **Beschreibung** — ein kurzer, appetitanregender Satz auf Deutsch. Bei `fixedYield`-
   Rezepten die Form/Größe hier prominent nennen (z. B. "... für eine 20-cm-Springform
   (12 Stück)"), nicht nur im `fixedYield.label` verstecken.
