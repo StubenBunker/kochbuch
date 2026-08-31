@@ -6,6 +6,7 @@ import { findRecipe } from '../src/data/recipes';
 import { Header } from '../src/components/Header';
 import { EmptyState } from '../src/components/EmptyState';
 import { PortionStepper } from '../src/components/PortionStepper';
+import { YieldFactorInput } from '../src/components/YieldFactorInput';
 import { RecipePhoto } from '../src/components/RecipePhoto';
 import { colors, fonts, radii } from '../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
@@ -13,11 +14,14 @@ import { DEFAULT_PORTIONS, useHousehold } from '../src/store/household';
 export default function WocheScreen() {
   const plan = useHousehold((s) => s.plan);
   const portions = useHousehold((s) => s.portions);
+  const yieldFactor = useHousehold((s) => s.yieldFactor);
   const cart = useHousehold((s) => s.cart);
   const setPortion = useHousehold((s) => s.setPortion);
+  const setYieldFactor = useHousehold((s) => s.setYieldFactor);
   const removeFromPlan = useHousehold((s) => s.removeFromPlan);
   const toggleCart = useHousehold((s) => s.toggleCart);
   const portionFor = (id: string) => portions[id] ?? DEFAULT_PORTIONS;
+  const yieldFactorFor = (id: string) => yieldFactor[id] ?? 1;
 
   const planRecipes = useMemo(
     () => plan.map((id) => findRecipe(id)).filter((r): r is NonNullable<typeof r> => !!r),
@@ -55,7 +59,15 @@ export default function WocheScreen() {
                     {recipe.title}
                   </Text>
                   {recipe.fixedYield ? (
-                    <Text style={styles.fixedYieldLabel}>{recipe.fixedYield.label}</Text>
+                    <View style={styles.fixedYieldRow}>
+                      <Text style={styles.fixedYieldLabel} numberOfLines={1}>
+                        {recipe.fixedYield.label}
+                      </Text>
+                      <YieldFactorInput
+                        value={yieldFactorFor(recipe.id)}
+                        onChange={(value) => setYieldFactor(recipe.id, value)}
+                      />
+                    </View>
                   ) : (
                     <PortionStepper
                       variant="plan"
@@ -136,7 +148,13 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 6,
   },
+  fixedYieldRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   fixedYieldLabel: {
+    flexShrink: 1,
     fontFamily: fonts.mono,
     fontSize: 11.5,
     color: colors.inkMuted,

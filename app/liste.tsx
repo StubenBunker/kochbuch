@@ -25,6 +25,7 @@ const UNIT_OPTIONS: { label: string; value: CustomUnit | undefined }[] = [
 export default function ListeScreen() {
   const plan = useHousehold((s) => s.plan);
   const portions = useHousehold((s) => s.portions);
+  const yieldFactor = useHousehold((s) => s.yieldFactor);
   const cart = useHousehold((s) => s.cart);
   const checked = useHousehold((s) => s.checked);
   const checkedAt = useHousehold((s) => s.checkedAt);
@@ -48,7 +49,10 @@ export default function ListeScreen() {
 
   const cartIds = useMemo(() => plan.filter((id) => cart[id]), [plan, cart]);
   const groups = useMemo(() => {
-    const merged = mergeCustomItems(buildShoppingList(cartIds, portions, DEFAULT_PORTIONS), customItems);
+    const merged = mergeCustomItems(
+      buildShoppingList(cartIds, portions, DEFAULT_PORTIONS, yieldFactor),
+      customItems,
+    );
     return merged
       .map((group) => ({
         ...group,
@@ -58,7 +62,7 @@ export default function ListeScreen() {
         }),
       }))
       .filter((group) => group.items.length > 0);
-  }, [cartIds, portions, customItems, checked, checkedAt, now]);
+  }, [cartIds, portions, yieldFactor, customItems, checked, checkedAt, now]);
   const allItems = useMemo(() => groups.flatMap((g) => g.items), [groups]);
   const checkedCount = allItems.filter((item) => checked[item.key]).length;
   const total = allItems.length;

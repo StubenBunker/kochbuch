@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { findRecipe } from '../../src/data/recipes';
 import { PortionStepper } from '../../src/components/PortionStepper';
+import { YieldFactorInput } from '../../src/components/YieldFactorInput';
 import { RecipePhoto } from '../../src/components/RecipePhoto';
 import { colors, fonts, radii } from '../../src/theme/tokens';
 import { DEFAULT_PORTIONS, useHousehold } from '../../src/store/household';
@@ -17,7 +18,9 @@ export default function RecipeDetailScreen() {
   const plan = useHousehold((s) => s.plan);
   const favs = useHousehold((s) => s.favs);
   const portions = useHousehold((s) => (recipe ? s.portions[recipe.id] ?? DEFAULT_PORTIONS : DEFAULT_PORTIONS));
+  const yieldFactor = useHousehold((s) => (recipe ? s.yieldFactor[recipe.id] ?? 1 : 1));
   const setPortion = useHousehold((s) => s.setPortion);
+  const setYieldFactor = useHousehold((s) => s.setYieldFactor);
   const toggleAdd = useHousehold((s) => s.toggleAdd);
   const toggleFav = useHousehold((s) => s.toggleFav);
 
@@ -31,7 +34,7 @@ export default function RecipeDetailScreen() {
 
   const inWeek = plan.includes(recipe.id);
   const isFav = !!favs[recipe.id];
-  const scale = recipe.fixedYield ? 1 : portions;
+  const scale = recipe.fixedYield ? yieldFactor : portions;
 
   return (
     <View style={styles.screen}>
@@ -77,10 +80,19 @@ export default function RecipeDetailScreen() {
           <Text style={styles.description}>{recipe.description}</Text>
 
           {recipe.fixedYield ? (
-            <View style={styles.portionCard}>
-              <Text style={styles.portionLabel}>Ergibt</Text>
-              <Text style={styles.fixedYieldValue}>{recipe.fixedYield.label}</Text>
-            </View>
+            <>
+              <View style={styles.portionCard}>
+                <Text style={styles.portionLabel}>Ergibt</Text>
+                <Text style={styles.fixedYieldValue}>{recipe.fixedYield.label}</Text>
+              </View>
+              <View style={[styles.portionCard, styles.factorCard]}>
+                <Text style={styles.portionLabel}>Menge anpassen</Text>
+                <YieldFactorInput
+                  value={yieldFactor}
+                  onChange={(value) => setYieldFactor(recipe.id, value)}
+                />
+              </View>
+            </>
           ) : (
             <View style={styles.portionCard}>
               <Text style={styles.portionLabel}>Portionen</Text>
@@ -209,6 +221,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  factorCard: {
+    marginTop: 10,
   },
   portionLabel: {
     fontSize: 14.5,

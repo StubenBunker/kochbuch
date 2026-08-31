@@ -12,6 +12,9 @@ const HOUSEHOLD_DOC = 'shared';
 export type HouseholdState = {
   plan: string[];
   portions: Record<string, number>;
+  // Für `fixedYield`-Rezepte (Kuchen etc.): Multiplikator statt Portionenzahl,
+  // z.B. 1.32 für eine 23-cm- statt 20-cm-Springform (Flächenverhältnis).
+  yieldFactor: Record<string, number>;
   favs: Record<string, boolean>;
   checked: Record<string, boolean>;
   checkedAt: Record<string, number>; // ms timestamp — drives the auto-hide delay
@@ -23,8 +26,10 @@ type Store = HouseholdState & {
   hydrated: boolean;
   synced: boolean;
   portionFor: (id: string) => number;
+  yieldFactorFor: (id: string) => number;
   toggleAdd: (id: string) => void;
   setPortion: (id: string, delta: number) => void;
+  setYieldFactor: (id: string, value: number) => void;
   removeFromPlan: (id: string) => void;
   toggleFav: (id: string) => void;
   toggleChecked: (key: string) => void;
@@ -42,6 +47,7 @@ function pick(s: HouseholdState): HouseholdState {
   return {
     plan: s.plan,
     portions: s.portions,
+    yieldFactor: s.yieldFactor,
     favs: s.favs,
     checked: s.checked,
     checkedAt: s.checkedAt,
@@ -71,6 +77,7 @@ function schedulePersist(state: HouseholdState) {
 export const useHousehold = create<Store>((set, get) => ({
   plan: [],
   portions: {},
+  yieldFactor: {},
   favs: {},
   checked: {},
   checkedAt: {},
@@ -79,6 +86,7 @@ export const useHousehold = create<Store>((set, get) => ({
   hydrated: false,
   synced: false,
   portionFor: (id) => get().portions[id] ?? DEFAULT_PORTIONS,
+  yieldFactorFor: (id) => get().yieldFactor[id] ?? 1,
   toggleAdd: (id) =>
     set((s) => {
       const inPlan = s.plan.includes(id);
@@ -96,6 +104,13 @@ export const useHousehold = create<Store>((set, get) => ({
       const portions = { ...s.portions, [id]: value };
       schedulePersist(pick({ ...s, portions }));
       return { portions };
+    }),
+  setYieldFactor: (id, value) =>
+    set((s) => {
+      const clamped = Number.isFinite(value) ? Math.max(0.1, Math.min(10, value)) : 1;
+      const yieldFactor = { ...s.yieldFactor, [id]: clamped };
+      schedulePersist(pick({ ...s, yieldFactor }));
+      return { yieldFactor };
     }),
   removeFromPlan: (id) =>
     set((s) => {
@@ -176,6 +191,7 @@ export async function initHouseholdSync(): Promise<void> {
         const next = {
           plan: data.plan ?? [],
           portions: data.portions ?? {},
+          yieldFactor: data.yieldFactor ?? {},
           favs: data.favs ?? {},
           checked: data.checked ?? {},
           checkedAt: data.checkedAt ?? {},
